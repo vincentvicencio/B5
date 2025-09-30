@@ -1,7 +1,18 @@
 // Body
-$body-bg: #f8fafc;
+$body-bg: #F6F7F9;
 
 // Typography
-$font-family-sans-serif: 'Nunito', sans-serif;
+$font-family-sans-serif: 'Poppins', sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
+$header-text-color: #072F6D;
+$subtitle-text-color: #9EA7B4;
+$stroke: #E4E9EE;
+$hover: lighten($header-text-color, 10%);
+
+// Traits Color Representation
+$openness: #895AF6;
+$conscientiousness: #16A249;
+$extraversion: #F97415;
+$agreeableness: #DD1D4A;
+$neuroticism: #358FE9;

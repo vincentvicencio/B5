@@ -1,8 +1,20 @@
 // Fonts
-@import url('https://fonts.bunny.net/css?family=Nunito');
+ @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
 // Variables
 @import 'variables';
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
+// Boostrap Icon
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+// Dashboard
+@import 'dashboard';
+
+// Respondents
+@import 'respondents';
+
+// Respondents Show
+@import 'respondents-show'

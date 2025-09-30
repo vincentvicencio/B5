@@ -1,0 +1,46 @@
+#respondents {
+    .header-content {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    h1 {
+        color: $header-text-color;
+        font-weight: bold;
+        font-size: 36px;
+    }
+
+    p {
+        color: $subtitle-text-color;
+        font-size: 16px;
+    }
+
+    #export-btn {
+        color: white;
+        background: $header-text-color;
+        border-radius: 10px;
+        width: 125px;
+        height: 50px;
+        border: none;
+        font-weight: 600;
+    }
+
+    #export-btn:hover {
+        background: $hover;
+        cursor: pointer;
+    }
+
+    .search-container {
+        padding: 2rem;
+        background-color: #e4e9ee; /* Light gray background to match the image */
+        border-radius: 10px;
+    }
+
+    .dropdown-menu .dropdown-item:active,
+    .dropdown-menu .dropdown-item:focus,
+    .dropdown-menu .dropdown-item:hover {
+        background-color: #072f6d !important;
+        color: white !important; /* To ensure the text is readable */
+    }
+}
