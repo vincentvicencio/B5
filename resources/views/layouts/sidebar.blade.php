@@ -10,7 +10,7 @@
 
     <ul class="nav flex-column">
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ route('dashboard') }}">
                 <i class="bi bi-grid-fill"></i> Dashboard
             </a>
         </li>
@@ -20,7 +20,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ route('respondents.index') }}">
                 <i class="bi bi-people"></i> Respondents
             </a>
         </li>

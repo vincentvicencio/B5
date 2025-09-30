@@ -1,5 +1,5 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+ @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
 // Variables first
 @import 'variables';
@@ -7,6 +7,17 @@
 // Bootstrap next
 @import 'bootstrap/scss/bootstrap';
 
+// Boostrap Icon
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+// Dashboard
+@import 'dashboard';
+
+// Respondents
+@import 'respondents';
+
+// Respondents Show
+@import 'respondents-show';
 // Custom pages
 @import 'login';
 

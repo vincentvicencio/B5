@@ -1,0 +1,134 @@
+#respondents-show {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: $header-text-color;
+    }
+
+    h1 {
+        font-size: 36px;
+    }
+
+    p {
+        color: $subtitle-text-color;
+        font-size: 16px;
+    }
+
+    h2 {
+        font-size: 32px;
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+
+    i {
+        font-size: 36px;
+        color: $header-text-color;
+    }
+
+    .btn-link {
+        color: $header-text-color;
+    }
+
+    .response-card {
+        border: 2px solid $stroke !important;
+        border-radius: 10px;
+    }
+    .info-label {
+        font-size: 16px;
+        color: $header-text-color;
+        font-weight: 600;
+    }
+
+    .info-value {
+        font-size: 24px;
+    }
+
+    .trait {
+        color: $header-text-color;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .sub-trait {
+        font-size: 20px;
+    }
+
+    .high-badge {
+        background: $header-text-color;
+        border-radius: 50px;
+        width: 62px;
+        height: 26px;
+        font-size: 14px;
+        color: white;
+    }
+
+    .moderate-badge {
+        background: $white;
+        color: $header-text-color;
+        border: 1px solid $header-text-color;
+        border-radius: 50px;
+        width: 92px;
+        height: 26px;
+        font-size: 14px;
+    }
+
+    .low-badge {
+        background: #f1f5f9;
+        color: $header-text-color;
+        border-radius: 50px;
+        width: 62px;
+        height: 26px;
+        font-size: 14px;
+    }
+
+    .score-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .progress {
+        height: 18px;
+    }
+
+    .openness-progress-bar {
+        background: $openness;
+        width: 72%;
+    }
+
+    .conscientiousness-progress-bar {
+        width: 20%;
+        background: $conscientiousness;
+    }
+
+    .extraversion-progress-bar {
+        width: 20%;
+        background: $extraversion;
+    }
+
+    .agreeableness-progress-bar {
+        background: $agreeableness;
+        width: 72%;
+    }
+
+    .neuroticism-progress-bar {
+        width: 50%;
+        background: $neuroticism;
+    }
+
+    .trait-interpretation {
+        color: $header-text-color;
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    .subtrait-level {
+        color: $header-text-color;
+        font-size: 18px;
+    }
+}
