@@ -1,8 +1,16 @@
 // Fonts
-@import url('https://fonts.bunny.net/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
-// Variables
+// Variables first
 @import 'variables';
 
-// Bootstrap
+// Bootstrap next
 @import 'bootstrap/scss/bootstrap';
+
+// Custom pages
+@import 'login';
+
+@import 'navbar';
+
+@import 'sidebar';
+
