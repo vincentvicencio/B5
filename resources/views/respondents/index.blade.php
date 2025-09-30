@@ -2,10 +2,9 @@
 
 @section('content')
 
+    
     <div id="respondents" class="py-6 sm:py-12">
-
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-
             <div class="container-fluid header-content">
                 <div class="header-text">
                     <h1> Respondents </h1>
@@ -18,22 +17,21 @@
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-12 col-lg-12">
                         <div class="p-4 bg-white rounded-3 shadow-sm border search-container">
-                            <div class="row g-2">
-                                <div class="col-md-6 col-lg-6">
+                            <div class="row g-2 align-items-center">
+                                <div class="col-12 col-md-6 col-lg-6">
                                     <div class="input-group">
-                                        <span class="input-group-text border-end-0">
+                                        <!-- <span class="input-group-text border-end-0">
                                             <i class="bi bi-search"></i>
-                                        </span>
+                                        </span> -->
                                         <input type="text" id="name-email-search" class="form-control border-start-0"
                                             placeholder="Search by name, email ....">
                                     </div>
                                 </div>
-
-                                <div class="col-md-3 col-lg-3">
+                                <div class="col-12 col-md-6 col-lg-3">
                                     <div class="input-group dropdown">
-                                        <span class="input-group-text border-end-0">
+                                        <!-- <span class="input-group-text border-end-0">
                                             <i class="bi bi-filter"></i>
-                                        </span>
+                                        </span> -->
                                         <div id="interpretation-filter"
                                             class="form-control border-start-0 d-flex justify-content-between align-items-center"
                                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -50,11 +48,11 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-3 col-lg-3">
+                                <div class="col-12 col-md-6 col-lg-3">
                                     <div class="input-group dropdown">
-                                        <span class="input-group-text border-end-0">
+                                        <!-- <span class="input-group-text border-end-0">
                                             <i class="bi bi-filter"></i>
-                                        </span>
+                                        </span> -->
                                         <div id="recommendation-filter"
                                             class="form-control border-start-0 d-flex justify-content-between align-items-center"
                                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -129,8 +127,8 @@
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
-
+    
+    <script src="{{ asset('js/search.js') }}"></script>
 @endsection

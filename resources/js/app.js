@@ -9,3 +9,8 @@ window.Chart = Chart;
 
 import './dashboard';
 import './search';
+import './login';
+import './navbar';
+import './sidebar'; 
+
+
