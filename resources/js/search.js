@@ -1,10 +1,22 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Only run this code if the elements exist (on the respondents page)
     const searchInput = document.getElementById('name-email-search');
+    if (!searchInput) {
+        console.log('Search input not found - skipping respondents page script');
+        return; // Exit early if elements don't exist
+    }
+    
     const interpretationPlaceholder = document.getElementById('interpretation-placeholder');
     const interpretationMenu = document.getElementById('interpretation-menu');
     const recommendationPlaceholder = document.getElementById('recommendation-placeholder');
     const recommendationMenu = document.getElementById('recommendation-menu');
     const registeredIdTable = document.getElementById('registeredidTable');
+
+    // Only proceed if all required elements exist
+    if (!interpretationPlaceholder || !interpretationMenu || !recommendationPlaceholder || !recommendationMenu || !registeredIdTable) {
+        console.log('Some required elements not found - skipping');
+        return;
+    }
 
     // This function applies all filters to the table
     function applyFilters() {
@@ -31,10 +43,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Listen for keyup events on the main search input
     searchInput.addEventListener('keyup', applyFilters);
 
-    // Listen for clicks on the interpretation dropdown menu items
     interpretationMenu.querySelectorAll('a.dropdown-item').forEach(item => {
         item.addEventListener('click', function(event) {
             event.preventDefault();
@@ -43,7 +53,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Listen for clicks on the recommendation dropdown menu items
     recommendationMenu.querySelectorAll('a.dropdown-item').forEach(item => {
         item.addEventListener('click', function(event) {
             event.preventDefault();

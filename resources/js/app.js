@@ -16,4 +16,6 @@ import './admin';
 import './admin-edit';
 
 
+import './interpretation';
+import './common';
 

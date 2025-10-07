@@ -1,0 +1,118 @@
+#interpretation {
+    // Top-level header and subtitle styling
+    h1 {
+        color: $header-text-color;
+        font-weight: bold;
+        font-size: 36px;
+    }
+
+    p {
+        color: $subtitle-text-color;
+        font-size: 16px;
+    }
+
+    // Sub-section headers (H2)
+    h2 {
+        color: $header-text-color;
+        font-weight: 600;
+        font-size: 1.5rem; // Text-2xl equivalent
+    }
+
+    // Card styling
+    .card {
+        border-radius: 0.5rem;
+        border: 1px solid $stroke; // Add border to match prototype's division
+    }
+
+    // The index circle (1, 2, 3...)
+    .score-index-circle {
+        width: 30px;
+        height: 30px;
+        font-weight: 700;
+        background-color: #e9ecef; // Light gray background
+        color: #495057; // Darker text
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 5px; // Align better with content
+    }
+
+    // Style for the labels (e.g., Score Range, Trait Level)
+    .form-label {
+        color: $header-text-color; // Use a darker color for the label text
+        font-size: 0.95rem;
+        font-weight: 600; // Making it bolder to match the prototype
+    }
+
+    // Style for the read-only inputs to make them look like static boxes
+    .form-control[readonly] {
+        background-color: #f8f9fa; /* Light background for the static field */
+        border: 1px solid $stroke;
+        cursor: default; /* Change cursor to indicate it's not editable */
+    }
+
+    textarea.form-control[readonly] {
+        resize: none;
+    }
+
+    // Edit/Delete buttons (actions)
+    .card-actions {
+        .btn-link {
+            color: $subtitle-text-color; // Gray for icons
+            padding: 0;
+            opacity: 0.8;
+            &:hover {
+                opacity: 1;
+                color: $primary; // Primary color on hover
+            }
+        }
+    }
+
+    .py-6 {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+    }
+
+    .btn-edit {
+        color: $header-text-color !important;
+        &:hover {
+            color: darken($header-text-color, 10%) !important;
+        }
+    }
+
+    // Override the link color for Delete (Red)
+    .btn-delete {
+        color: $danger !important;
+        &:hover {
+            color: darken($danger, 10%) !important;
+        }
+    }
+
+    .add-btn {
+        border: 1px solid $header-text-color;
+        font-weight: 500;
+        color: $header-text-color;
+
+        &:hover {
+            background: $header-text-color;
+            color: white;
+        }
+    }
+
+    .save-btn {
+        background: $header-text-color;
+        color: white;
+
+        &:hover {
+            background: $hover;
+        }
+    }
+
+    .modal-header {
+        background: $header-text-color;
+        color: white;
+    }
+
+}

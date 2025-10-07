@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddSection;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InterpretationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RespondentsController;
 use App\Http\Controllers\LandingController;
@@ -25,6 +26,9 @@ Route::group(['prefix' => 'respondents'], function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/interpretation', [InterpretationController::class, 'index'])->name('interpretation');
+
 
 
 Route::get('/user', [LandingController::class, 'index'])->name('landing');
