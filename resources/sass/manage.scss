@@ -1,0 +1,365 @@
+
+#manage-index,
+#manage-create,
+#manage-edit,
+#back-icon .back-title, 
+.manage-title, 
+.trait-title, 
+.questions-list-title, 
+.modal-title-custom, 
+.form-label, 
+.input-group .input-group-text, 
+.sub-trait-group-container h6, 
+.sub-trait-group-header, 
+.card .card-body p, 
+#back-icon a { 
+    color: $header-text-color;
+}
+
+// --- Back Icon Styles ---
+#back-icon {
+    a {
+        text-decoration: none;
+        transition: all 0.2s ease;
+
+        &:hover {
+            color: $hover;
+
+            i {
+                transform: translateX(-3px);
+            }
+        }
+
+        i {
+            transition: transform 0.2s ease;
+        }
+    }
+}
+
+// --- Common Card, Container, & Section Styles ---
+
+// Base for containers with primary background and stroke
+.trait-card,
+.trait-sub-card, // Added for background/stroke consistency
+.question-form-area { // Added for background/stroke consistency
+    border: 1px solid $stroke;
+    border-radius: 12px;
+}
+
+.trait-card {
+    background: $container-bg;
+    margin-bottom: 20px;
+    box-shadow: none;
+    transition: all 0.2s ease;
+}
+
+.trait-sub-card,
+.question-form-area {
+    background: $sub-container-bg;
+    margin-bottom: 20px; // Consistent spacing
+}
+
+.trait-sub-card {
+    padding: 20px;
+}
+
+.question-form-area {
+    padding: 24px;
+}
+
+.trait-card-with-color {
+    border-left-width: 8px;
+    border-left-style: solid;
+}
+
+.section-header {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 0;
+
+    i {
+        opacity: 0.7;
+    }
+}
+
+.trait-header {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.trait-content {
+    flex: 1;
+}
+
+.trait-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.trait-description {
+    color: $subtitle-text-color;
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+.trait-body {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px dashed $stroke;
+
+    &.d-block {
+        display: block !important;
+    }
+}
+
+.question-badge {
+    background-color: $header-text-color;
+    color: $white;
+    font-size: 0.875rem;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.edit-btn {
+    text-decoration: none;
+    font-weight: 500;
+    border: 1px solid $stroke;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    display: inline-block;
+
+    &:hover {
+        background-color: $header-text-color;
+        color: white !important;
+        cursor: pointer;
+    }
+}
+
+.text-header-color {
+    color: $header-text-color !important;
+}
+
+// --- Sub-trait Group Styles ---
+.sub-trait-group-container {
+    h6 {
+        font-size: 1.1rem;
+        margin-top: 1rem;
+        margin-bottom: 0.25rem;
+    }
+
+    hr {
+        border-top: 2px solid $header-text-color;
+        opacity: 1;
+        margin-top: 0.25rem;
+        margin-bottom: 0;
+    }
+}
+
+// --- Primary Button Group (Consolidated) ---
+.btn-primary,
+.btn-add-trait,
+.btn-add-subtrait,
+.btn-add-question,
+.btn-save {
+    // Base Primary Styles
+    background-color: $header-text-color;
+    border-color: $header-text-color;
+    color: $white;
+    border-radius: 8px;
+    font-weight: 500; // Consistent font weight
+    transition: all 0.2s ease;
+
+    // Default sizing and font-weight (can be overridden by specific selectors)
+    padding: 12px 24px;
+    font-weight: 500;
+
+    &:hover {
+        background-color: $hover;
+        border-color: $hover;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        color: $white; // Ensure hover color is white (for add-subtrait/question/save)
+    }
+    
+    // Add specific style overrides for exceptions
+    &.btn-save {
+        padding: 10px 16px;
+        font-weight: 600;
+    }
+
+    &.btn-add-subtrait,
+    &.btn-add-question {
+        font-weight: 600;
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    a {
+        color: $white;
+        text-decoration: none;
+    }
+}
+
+
+// --- Form Styles ---
+.form-control,
+.form-select {
+    border-radius: 8px;
+    border: 1px solid $stroke;
+    padding: 12px 16px;
+    transition: all 0.2s ease;
+    background-color: $white;
+    font-size: 14px;
+
+    &:focus {
+        border-color: $header-text-color;
+        box-shadow: 0 0 0 0.2rem rgba($header-text-color, 0.1);
+        background-color: $white;
+    }
+
+    &::placeholder {
+        color: rgba($subtitle-text-color, 0.6);
+    }
+}
+
+.form-label {
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.input-group {
+    .input-group-text {
+        background-color: $sub-container-bg;
+        border-color: $stroke;
+        font-weight: 500;
+        border-radius: 8px 0 0 8px;
+    }
+
+    .form-control {
+        border-radius: 0;
+
+        &:focus {
+            border-color: $stroke; // Overrides the default focus style
+            box-shadow: none;
+        }
+    }
+
+    .btn {
+        border-radius: 0 8px 8px 0;
+    }
+}
+
+// --- Sub-trait Tags & Group Headers ---
+.sub-trait-tag {
+    background-color: $header-text-color;
+    color: $white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    margin: 0 8px 8px 0;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .remove-tag,
+    .edit-tag {
+        cursor: pointer;
+        opacity: 0.8;
+        transition: opacity 0.2s ease;
+        color: $white;
+
+        &.edit-tag {
+            margin-right: 5px;
+            margin-left: 8px;
+        }
+    }
+}
+
+.sub-trait-group-header {
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 0;
+    border-bottom: 2px solid $header-text-color;
+    display: inline-block;
+}
+
+// --- Card Styles for Questions ---
+.card {
+    border: 1px solid $stroke;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+
+    &:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transform: translateY(-1px);
+    }
+
+    .card-body {
+        p {
+            font-size: 14px;
+        }
+    }
+}
+
+// --- Text Utilities ---
+.text-muted {
+    color: $subtitle-text-color !important;
+    font-size: 14px;
+}
+
+.text-light {
+    color: rgba($subtitle-text-color, 0.5) !important;
+}
+
+    .modal-header {
+
+        background: $header-text-color;
+    }
+
+// --- Responsive Adjustments ---
+@media (max-width: 768px) {
+    .d-flex.gap-2,
+    .d-flex.gap-3 {
+        flex-direction: column;
+
+        button {
+            width: 100%;
+        }
+    }
+
+    #back-icon h1 {
+        font-size: 1.25rem;
+    }
+}
+
+// --- Animation for adding elements ---
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animated-add {
+    animation: slideIn 0.3s ease;
+}

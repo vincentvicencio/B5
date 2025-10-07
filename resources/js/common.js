@@ -1,7 +1,6 @@
 // resources/js/common.js
 
 class Common {
-
     processData(url, method, data) {
         return $.ajax({
             url: window.location.origin + url,
@@ -16,60 +15,87 @@ class Common {
     }
 
     /**
-     * Sets up the click handler for the 'Yes, Delete' button in the modal.
-     * Must be called once per page load to activate the delete logic.
-     * @param {string} baseUrl - The base API endpoint (e.g., '/api/score-interpretation').
+     * Sets a custom click handler for the 'Yes, Delete' button in the modal.
+     * Use this for non-API deletion (e.g., deleting a question from a local array).
+     * @param {function} handler - The function to execute on click.
+     */
+    setupButtonHandler(handler) {
+        // Unbind any previous handler (to prevent running both API and local logic)
+        $("#deleteConfirmationModal #btn_delete_ok").off("click");
+
+        // Bind the new custom handler
+        $("#deleteConfirmationModal #btn_delete_ok").on("click", function (event) {
+            handler(event);
+        });
+    }
+
+    /**
+     * Sets up the click handler for the 'Yes, Delete' button to perform RESTful API deletion.
+     * This is intended for the Index page where records are deleted from the database.
+     * @param {string} baseUrl - The base API endpoint (e.g., '/api/manage').
      * @param {function} callback - Function to run on successful deletion (e.g., removing the element from DOM).
      */
     setupDeleteConfirmation(baseUrl, callback) {
         const self = this;
-        // Target the specific button ID in the delete modal component
-        $("#deleteConfirmationModal #btn_delete_ok").off('click').on('click', function () {
-            const recordId = $("#deleteConfirmationModal #delete_record_id").val();
+        
+        // Use the generic setup method, wrapping the API logic
+        this.setupButtonHandler(function () {
+            const recordId = $(
+                "#deleteConfirmationModal #delete_record_id"
+            ).val(); 
             
-            // Construct the full URL for the DELETE request
-            const deleteUrl = `${baseUrl}/${recordId}`; 
-            
+            const deleteUrl = `${baseUrl}/${recordId}`;
             $.ajax({
                 url: deleteUrl,
                 type: "DELETE", // Use DELETE method for RESTful API
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
                 success: function (response) {
-                    // FIX: Use jQuery/Bootstrap method to ensure the modal is hidden.
-                    $('#deleteConfirmationModal').modal('hide');
-                    
-                    // Show success toast
-                    self.showToast(response.message || 'Item deleted successfully!');
-                    
-                    // Execute the page-specific callback (e.g., remove from DOM)
-                    if (callback) {
-                         callback(recordId); 
+                    // FIX: Explicitly hide the Bootstrap modal using the proper instance method.
+                    const modalElement = document.getElementById("deleteConfirmationModal");
+                    if (modalElement) {
+                        const deleteModalInstance = bootstrap.Modal.getInstance(modalElement);
+                        if (deleteModalInstance) {
+                            deleteModalInstance.hide();
+                        }
                     }
 
-                    // Optional: reload the page after a short delay
-                    setTimeout(() => { location.reload() }, 2000); 
+                    // Show success toast
+                    self.showToast(
+                        response.message || "Item deleted successfully!"
+                    );
+
+                    // Execute the page-specific callback (e.g., remove the element from DOM)
+                    callback(recordId);
                 },
-                error: function(xhr) {
-                    // FIX: Also hide the modal on error
-                    $('#deleteConfirmationModal').modal('hide');
-                    self.showToast(xhr.responseJSON?.message || 'Error deleting item.', 1); // Error toast
-                }
+                error: function (xhr) {
+                    self.showToast(
+                        xhr.responseJSON.message ||
+                            "Error deleting the item. Please try again.",
+                        1
+                    );
+                    console.error("Delete failed:", xhr.responseText);
+                },
             });
         });
     }
 
     /**
-     * Shows the delete confirmation modal and sets the data needed for deletion.
-     * @param {number|string} id - The ID of the record to be deleted.
-     * @param {string} title - The modal title.
-     * @param {string} message - The confirmation message.
+     * Shows the delete confirmation modal with dynamic content.
+     * This function only handles setting content and showing the modal.
+     * The button handler must be set separately using setupButtonHandler or setupDeleteConfirmation.
      */
-    showDeleteConfirmation(id, title = 'Confirm Deletion', message = 'Are you sure you want to delete this record?') {
+    showDeleteConfirmation(id, title, message) {
+        // Set dynamic content
         $("#deleteConfirmationModal #delete-title").text(title);
-        $("#deleteConfirmationModal #delete-message").text(message);
+        $("#deleteConfirmationModal #delete-message").html(message); // Use .html() to support strong tags and snippets
         $("#deleteConfirmationModal #delete_record_id").val(id); // Set the ID to the hidden input
 
-        var deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+        // Show the modal
+        var deleteModal = new bootstrap.Modal(
+            document.getElementById("deleteConfirmationModal")
+        );
         deleteModal.show();
     }
     
@@ -78,38 +104,49 @@ class Common {
      * @param msg = notification message
      * @param err = 1=Error, 0/null = Success
      */
+  /**
+     *
+     * @param msg = notification message
+     * @param err = 1=Error, 0/null = Success
+     */
     showToast(msg, err = 0) {
-        const $toast = $('.toast');
-        const $header = $toast.find('.toast-header');
+        const $toast = $(".toast");
+        const $header = $toast.find(".toast-header");
         const isError = err > 0;
         
         // Apply color classes to the header only (bg-success or bg-danger)
-        $header.removeClass('bg-success bg-danger').addClass(isError ? 'bg-danger' : 'bg-success');
-        
+        $header
+            .removeClass("bg-success bg-danger")
+            .addClass(isError ? "bg-danger" : "bg-success");
+            
         // Set the message text in the toast body
-        $toast.find('.toast-body strong').text(msg);
-        $toast.css('z-index', 10000); // Bring to front
-        
-        // Use Bootstrap's Toast API
-        var toast = new bootstrap.Toast($toast[0], {
-            delay: 3000
-        });
+        $toast.find(".toast-body strong").text(msg);
+
+        // Bring to front
+        $toast.css("z-index", 10000);
+
+        // CRITICAL FIX: Initialize the toast. We MUST NOT pass a delay option,
+        // as the HTML attribute data-bs-delay is already handling it.
+        var toast = new bootstrap.Toast($toast[0]); 
 
         toast.show();
-        
-        // Ensure toast hides after delay
-        setTimeout(() => {
-             toast.hide(); 
-        }, 3500); 
+        // The manual setTimeout(toast.hide) is now GONE.
     }
 
-
     showError(formid, index, value) {
-        var elem_id = '#' + index;
-        $(formid + ' ' + elem_id).addClass('error-input');
-        $(formid + ' .error-' + index).removeClass('d-none');
-        $(formid + ' .error-' + index).html('<i class="bi bi-exclamation-circle-fill"></i> ' + value);
+        var elem_id = "#" + index;
+        $(formid + " " + elem_id)
+            .removeClass("is-valid")
+            .addClass("is-invalid")
+            .after(
+                '<div class="invalid-feedback text-danger error-' +
+                    index +
+                    '">' +
+                    value +
+                    "</div>"
+            );
     }
 }
 
-export default new Common;
+const CommonInstance = new Common();
+export default CommonInstance;

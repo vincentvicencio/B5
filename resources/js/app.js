@@ -1,4 +1,4 @@
-
+// app.js - Central application entry point for module loading
 
 import './bootstrap';
 
@@ -12,10 +12,5 @@ import './search';
 import './login';
 import './navbar';
 import './sidebar'; 
-import './admin';
-import './admin-edit';
-
-
-import './interpretation';
 import './common';
 

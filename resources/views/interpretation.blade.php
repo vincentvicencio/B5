@@ -72,6 +72,9 @@
                 </div>
             </div>
 
+     @vite(['resources/js/interpretation.js'])
+
+
             {{-- INCLUDE THE REUSABLE COMPONENTS --}}
             @include('components.confirmation')
             @include('components.toast')
