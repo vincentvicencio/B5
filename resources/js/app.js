@@ -1,4 +1,4 @@
-// resources/js/app.js
+
 
 import './bootstrap';
 
@@ -12,5 +12,10 @@ import './search';
 import './login';
 import './navbar';
 import './sidebar'; 
+import './admin';
+import './admin-edit';
 
+
+import './interpretation';
+import './common';
 

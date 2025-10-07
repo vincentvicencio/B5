@@ -39,7 +39,8 @@
 }
 
 .main-content {
-    margin-left: 250px;
+    margin-left: 220px;
+    margin-top: 90px;
     transition: margin-left .28s ease;
 }
 
@@ -47,7 +48,6 @@
     padding: 20px;
     margin-left: 100px;
 }
-
 /* Backdrop for mobile */
 .sidebar-backdrop {
     position: fixed;
@@ -98,6 +98,12 @@
 
 }
 
+.bi-list {
+    font-size: 1.5rem;
+    transform: scaleX(1.3); /* make it wider (1.1 = slight, 1.3 = more) */
+    display: inline-block;  
+    padding: 0 8px;
+}
 
 .sidebar-header {
     display: flex;

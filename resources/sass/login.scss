@@ -1,4 +1,4 @@
-   
+ 
     .login-page {
       height: 100vh;
       font-family: sans-serif;
@@ -15,14 +15,14 @@
       text-align: center;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
+
     }
 
     .login-page .login-left .img-1 {
       max-width: 350px;
-      margin-top: 30px;
-      margin-bottom: 4rem;
+      margin-bottom: 5rem;
+      max-height: 50%;
+      
     }
 
     .login-page .login-left .img-2 {
@@ -144,4 +144,4 @@
         margin: 0; 
         flex-grow: 0; 
       }
-    }
+    }     

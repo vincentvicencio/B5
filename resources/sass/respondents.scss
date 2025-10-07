@@ -1,9 +1,28 @@
 #respondents {
     .header-content {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
+        /* Remove: display: flex; flex-direction: row; justify-content: space-between; */
+        /* The new row/col structure handles the layout */
+
+        /* Add mobile-specific styles for smaller screens (like 430px) */
+        .header-text {
+            /* Ensure text aligns left on mobile */
+            text-align: left;
+        }
+
+        /* Responsive font size adjustments for extra small screens (below 576px) */
+        @media (max-width: 575.98px) {
+            h1 {
+                font-size: 28px; /* Reduce heading size */
+            }
+
+            p {
+                font-size: 14px; /* Reduce subtitle size */
+            }
+        }
     }
+
+    /* Remove the original h1, p, and header-content block, and use the updated one above.
+       The existing h1, p, and header-content styles should be replaced with the following: */
 
     h1 {
         color: $header-text-color;
@@ -20,10 +39,23 @@
         color: white;
         background: $header-text-color;
         border-radius: 10px;
-        width: 125px;
-        height: 50px;
+        height: 50px; /* Keep height fixed */
         border: none;
         font-weight: 600;
+        width: 125px !important;
+    }
+
+    @media (max-width: 575.98px) {
+        #export-btn {
+            width: 100% !important;
+            margin-bottom: 10px !important;
+        }
+    }
+
+    @media (min-width: 576px) and (max-width: 767.98px) {
+        #export-btn {
+            width: 150px !important;
+        }
     }
 
     #export-btn:hover {
@@ -45,10 +77,22 @@
     .dropdown-menu .dropdown-item:focus,
     .dropdown-menu .dropdown-item:hover {
         background-color: #072f6d !important;
-        color: white !important; 
+        color: white !important;
     }
 
+    #icon-design {
+        left: 0.8rem;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+    }
 
+    .input-group input {
+        padding-left: 2.5rem;
+    }
 
-    
+    #interpretation-placeholder,
+    #recommendation-placeholder {
+        padding-left: 2rem !important;
+    }
 }
