@@ -12,7 +12,9 @@ class Question extends Model
 
     protected $fillable = [
         'question_text',
-        'subtrait_id',
+        // FIX: The database column is likely named 'subtrait_id' (one word), 
+        // which caused the 'Unknown column sub_trait_id' error.
+        'subtrait_id', 
     ];
 
     /**
@@ -20,6 +22,7 @@ class Question extends Model
      */
     public function subTrait(): BelongsTo
     {
-        return $this->belongsTo(SubTrait::class);
+        // Explicitly defining the foreign key to match the database column name
+        return $this->belongsTo(SubTrait::class, 'subtrait_id');
     }
 }

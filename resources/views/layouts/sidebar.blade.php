@@ -15,9 +15,12 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="bi bi-patch-question"></i> Big Five Personality Test
-            </a>
+             <a href="{{ route('manage.index') }}" 
+                                       class="nav-link {{ request()->routeIs('manage.*') ? 'active' : '' }}">
+                                        <i class="bi bi-patch-question "></i>
+                                        Big Five Personality Test
+                                    </a>
+
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->routeIs('respondents.index') ? 'active' : '' }}" href="{{ route('respondents.index') }}">

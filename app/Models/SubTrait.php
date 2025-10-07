@@ -22,8 +22,8 @@ class SubTrait extends Model
      */
     public function trait(): BelongsTo
     {
-        // Using TraitModel since 'Trait' is a reserved keyword in PHP
-        return $this->belongsTo(TraitModel::class);
+        // Explicitly defining the foreign key 'trait_id'
+        return $this->belongsTo(TraitModel::class, 'trait_id');
     }
 
     /**
@@ -31,6 +31,8 @@ class SubTrait extends Model
      */
     public function questions(): HasMany
     {
-        return $this->hasMany(Question::class);
+        // FIX: Explicitly define the foreign key as 'subtrait_id' 
+        // to resolve the "Unknown column 'sub_trait_id'" error.
+        return $this->hasMany(Question::class, 'subtrait_id');
     }
 }

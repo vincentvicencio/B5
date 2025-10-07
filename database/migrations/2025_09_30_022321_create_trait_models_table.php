@@ -6,32 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-    {
-        Schema::create('traits', function (Blueprint $table) {
-            
-            $table->id(); 
-          
-            $table->string('title');
-           
-            $table->text('description');
-            
-            $table->string('trait_display_color', 7);
-            // max_raw_score (int)
-            $table->integer('max_raw_score');
-            
-            $table->timestamps();
-        });
-    }
+/**
+     * Run the migrations.
+     */
+public function up(): void
+ {
+Schema::create('traits', function (Blueprint $table) {
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('traits');
-    }
+ $table->id();
+
+$table->string('title');
+
+ $table->text('description');
+ $table->string('trait_display_color', 7);
+$table->integer('max_raw_score');
+
+ $table->timestamps();
+ });
+ }
+
+
+public function down(): void
+{Schema::dropIfExists('traits');
+    
+ }
 };
