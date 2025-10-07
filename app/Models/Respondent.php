@@ -19,6 +19,5 @@ class Respondent extends Model
         'middle_name',
         'email',
         'phone_number',
-        'type',
     ];
 }

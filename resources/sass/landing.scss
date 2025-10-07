@@ -1,0 +1,72 @@
+        .header-bg {
+            min-height: 3rem;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        img {
+            max-height: 70px;
+        }
+        
+        .top {
+            font-size: $font-size-base;
+            color:$header-text-color; 
+            background-color:#07306d3a;
+        }
+
+        .subtitle {
+            color: $subtitle-text-color;
+            max-width: 650px;
+        }
+        
+        .text2 {
+            color: $header-text-color;
+        }
+
+        .btn-bi {
+            font-size:1.25rem;
+        }
+
+        .icons {
+            width: 3.5rem; 
+            height: 3.5rem; 
+            background-color:#07306d3a;
+        }
+
+        .icon-bi{
+            font-size:1.75rem; 
+            color: $header-text-color;
+        }
+
+        .assessment-button {
+            background-color: $header-text-color !important;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(27, 85, 151, 0.4);
+        }
+        .assessment-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.349);
+        }
+        .feature-card {
+            outline: rgba(0, 0, 0, 0.062) 1px solid;
+            box-shadow: 0 4px 15px rgba(0, 119, 255, 0.068) !important;
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.664);
+        }
+
+        .display-magellan {
+            font-size: 2.5rem; 
+        }
+        @media (min-width: 576px) {
+            .display-magellan {
+                font-size: 3.5rem; 
+            }
+        }
+        @media (min-width: 992px) {
+            .display-magellan {
+                font-size: 4rem; 
+            }
+        }

@@ -3,41 +3,60 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Respondent;
 
-/**
- * Handles the main landing page for the Trait Assessment tool.
- */
 class LandingController extends Controller
 {
-    /**
-     * Display the main landing page view.
-     *
-     * @return \Illuminate\View\View
-     */
     public function index()
     {
-        // Define the data for the feature cards.
-        // In a complex application, this data would typically come from a database.
         $features = [
             [
                 'title' => 'Quick & Efficient',
-                'description' => 'Complete assessment in under 20 minutes with immediate results.',
+                'description' => 'Complete comprehensive personality assessment in just 15-20 minutes with our streamlined process.'
             ],
             [
                 'title' => 'Detailed Analytics',
-                'description' => 'Comprehensive trait breakdown with hiring recommendations.',
+                'description' => 'Receive in-depth personality insights with visual reports and actionable recommendations.'
             ],
             [
                 'title' => 'Team Focused',
-                'description' => 'Evaluate key traits for teamwork, leadership, and collaboration.',
+                'description' => 'Understand team dynamics and improve collaboration with personality-based insights.'
             ],
             [
                 'title' => 'Professional Grade',
-                'description' => 'Scientifically designed for accurate hiring decisions.',
-            ],
+                'description' => 'Built on validated psychological frameworks trusted by HR professionals worldwide.'
+            ]
         ];
 
-        // Pass the feature data to the 'landing' view
-        return view('landing', compact('features'));
+        return view('user.landing', compact('features'));
+    }
+
+    public function showOverview()
+    {
+        return view('user.overview');
+    }
+
+    public function showPersonalInfo()
+    {
+        return view('user.personal-info');
+    }
+
+    public function storePersonalInfo(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required|email|unique:respondents,email',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'phone_number' => 'required|string|max:20',
+        ]);
+
+        $respondent = Respondent::create($validated);
+
+        // Store respondent ID in session for the assessment
+        session(['respondent_id' => $respondent->id]);
+
+        // Redirect to the actual assessment page (you'll create this next)
+        return redirect()->route('assessment.start');
     }
 }
