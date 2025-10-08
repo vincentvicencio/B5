@@ -10,7 +10,7 @@
                 </div>
             <div class="modal-body">
                 <div class="notification">
-                    <h5 class="card-title text-center mt-3" id="delete-message">
+                    <h5 class="card-title text-center mt-3 fw-md text-dark" id="delete-message">
                         </h5>
 
                     <input type="hidden" name="delete_record_id" id="delete_record_id"

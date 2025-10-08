@@ -80,11 +80,11 @@ function renderLikertScales() {
                     <label class="form-label small fw-semibold mb-1">Rating Label</label>
                     <div class="likert-label-box">${escapeHtml(scale.label)}</div>
                 </div>
-                <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-secondary" onclick="editLikertScale(${scale.id})" title="Edit">
-                        <i class="bi bi-pencil"></i>
+                <div class="btn-group btn-group-md">
+                    <button class="btn btn-outline-secondary border-0 fs-5 text-header-color mt-4" onclick="editLikertScale(${scale.id})" title="Edit">
+                        <i class="bi bi-pencil-square"></i>
                     </button>
-                    <button class="btn btn-outline-danger" onclick="deleteLikertScale(${scale.id})" title="Delete">
+                    <button class="btn btn-outline-danger border-0 fs-5 mt-4" onclick="deleteLikertScale(${scale.id})" title="Delete">
                         <i class="bi bi-trash"></i>
                     </button>
                 </div>
@@ -339,11 +339,11 @@ function renderSubTraitMatrices() {
                 <td>${interpretationLevel}</td>
                 <td class="text-muted small">${updatedDate}</td>
                 <td class="text-center">
-                    <div class="btn-group btn-group-sm">
-                        <button class="btn btn-outline-secondary" onclick="editSubTraitMatrix(${matrix.id})" title="Edit">
-                            <i class="bi bi-pencil"></i>
+                    <div class="btn-group btn-group-md">
+                        <button class="btn btn-outline-secondary border-0 fs-5 text-header-color" onclick="editSubTraitMatrix(${matrix.id})" title="Edit">
+                            <i class="bi bi-pencil-square"></i>
                         </button>
-                        <button class="btn btn-outline-danger" onclick="deleteSubTraitMatrix(${matrix.id})" title="Delete">
+                        <button class="btn btn-outline-danger border-0 fs-5" onclick="deleteSubTraitMatrix(${matrix.id})" title="Delete">
                             <i class="bi bi-trash"></i>
                         </button>
                     </div>
@@ -506,10 +506,10 @@ function renderTraitMatrices() {
                     <div class="d-flex align-items-center">
                         <span class="badge bg-primary me-2">${interpretationLevel}</span>
                         <div class="btn-group btn-group-sm">
-                            <button class="btn btn-outline-secondary" onclick="editTraitMatrix(${matrix.id})" title="Edit">
-                                <i class="bi bi-pencil"></i>
+                            <button class="btn btn-outline-secondary border-0 fs-5 text-header-color" onclick="editTraitMatrix(${matrix.id})" title="Edit">
+                                <i class="bi bi-pencil-square"></i>
                             </button>
-                            <button class="btn btn-outline-danger" onclick="deleteTraitMatrix(${matrix.id})" title="Delete">
+                            <button class="btn btn-outline-danger border-0 fs-5" onclick="deleteTraitMatrix(${matrix.id})" title="Delete">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
