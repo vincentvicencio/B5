@@ -1,17 +1,16 @@
-
 #manage-index,
 #manage-create,
 #manage-edit,
-#back-icon .back-title, 
-.manage-title, 
-.trait-title, 
-.questions-list-title, 
-.form-label, 
-.input-group .input-group-text, 
-.sub-trait-group-container h6, 
-.sub-trait-group-header, 
-.card .card-body p, 
-#back-icon a { 
+#back-icon .back-title,
+.manage-title,
+.trait-title,
+.questions-list-title,
+.form-label,
+.input-group .input-group-text,
+.sub-trait-group-container h6,
+.sub-trait-group-header,
+.card .card-body p,
+#back-icon a {
     color: $header-text-color;
 }
 
@@ -40,7 +39,8 @@
 // Base for containers with primary background and stroke
 .trait-card,
 .trait-sub-card, // Added for background/stroke consistency
-.question-form-area { // Added for background/stroke consistency
+.question-form-area {
+    // Added for background/stroke consistency
     border: 1px solid $stroke;
     border-radius: 12px;
 }
@@ -162,18 +162,18 @@
     }
 }
 
- .save-btn {
-        background: $header-text-color;
-        color: white;
+.save-btn {
+    background: $header-text-color;
+    color: white;
 
-        &:hover {
-             background-color: $hover;
+    &:hover {
+        background-color: $hover;
         border-color: $hover;
         transform: translateY(-1px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        color: $white
-        }
+        color: $white;
     }
+}
 
 // --- Primary Button Group (Consolidated) ---
 .btn-primary,
@@ -200,7 +200,7 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         color: $white; // Ensure hover color is white (for add-subtrait/question/save)
     }
-    
+
     // Add specific style overrides for exceptions
     &.btn-save {
         padding: 10px 16px;
@@ -221,7 +221,6 @@
         text-decoration: none;
     }
 }
-
 
 // --- Form Styles ---
 .form-control,
@@ -339,10 +338,9 @@
     color: rgba($subtitle-text-color, 0.5) !important;
 }
 
-    .modal-header {
-
-        background: $header-text-color;
-    }
+.modal-header {
+    background: $header-text-color;
+}
 
 // --- Responsive Adjustments ---
 @media (max-width: 768px) {

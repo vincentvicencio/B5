@@ -43,8 +43,11 @@ class ScoreMatrixController extends Controller
     public function storeLikertScale(Request $request)
     {
         $validated = $request->validate([
-            'value' => 'required|integer|unique:likert_scales,value',
+            'value' => 'required|integer|min:1|max:10|unique:likert_scales,value',
             'label' => 'required|string|max:255'
+        ], [
+            'value.min' => 'The value must be at least 1.',
+            'value.max' => 'The value must not exceed 10.',
         ]);
 
         try {
@@ -67,8 +70,11 @@ class ScoreMatrixController extends Controller
     public function updateLikertScale(Request $request, $id)
     {
         $validated = $request->validate([
-            'value' => 'required|integer|unique:likert_scales,value,' . $id . ',id',
+            'value' => 'required|integer|min:1|max:10|unique:likert_scales,value,' . $id . ',id',
             'label' => 'required|string|max:255'
+        ], [
+            'value.min' => 'The value must be at least 1.',
+            'value.max' => 'The value must not exceed 10.',
         ]);
 
         try {
@@ -115,7 +121,6 @@ class ScoreMatrixController extends Controller
     public function getSubTraitMatrices()
     {
         try {
-            // CRITICAL FIX: Use 'id' instead of 'subtrait_id' for ordering
             $matrices = SubTraitScoreMatrix::with(['subTrait.trait', 'interpretation'])
                 ->join('sub_traits', 'sub_trait_score_matrices.subtrait_id', '=', 'sub_traits.id')
                 ->select('sub_trait_score_matrices.*')
@@ -140,7 +145,18 @@ class ScoreMatrixController extends Controller
     public function getSubTraits()
     {
         try {
-            $subTraits = SubTrait::with('trait')->orderBy('subtrait_name')->get();
+            $subTraits = SubTrait::with('trait')
+                ->orderBy('subtrait_name')
+                ->get()
+                ->map(function($subTrait) {
+                    return [
+                        'id' => $subTrait->id,
+                        'subtrait_name' => $subTrait->subtrait_name,
+                        'max_raw_score' => $subTrait->max_raw_score,
+                        'trait' => $subTrait->trait
+                    ];
+                });
+            
             return response()->json([
                 'success' => true,
                 'data' => $subTraits
@@ -176,7 +192,6 @@ class ScoreMatrixController extends Controller
 
     public function storeSubTraitMatrix(Request $request)
     {
-        // CRITICAL FIX: Validate against sub_traits.id instead of subtrait_id
         $validated = $request->validate([
             'subtrait_id' => 'required|exists:sub_traits,id',
             'min_score' => 'required|integer|min:0',
@@ -185,6 +200,17 @@ class ScoreMatrixController extends Controller
         ]);
 
         try {
+            // Get the sub-trait to check max_raw_score constraint
+            $subTrait = SubTrait::findOrFail($validated['subtrait_id']);
+            
+            // Validate max_score against sub-trait's max_raw_score
+            if ($validated['max_score'] > $subTrait->max_raw_score) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Max score ({$validated['max_score']}) cannot exceed the sub-trait's maximum raw score ({$subTrait->max_raw_score})."
+                ], 422);
+            }
+
             // Check for overlapping ranges
             $overlapping = SubTraitScoreMatrix::where('subtrait_id', $validated['subtrait_id'])
                 ->where(function($query) use ($validated) {
@@ -233,6 +259,17 @@ class ScoreMatrixController extends Controller
 
         try {
             $matrix = SubTraitScoreMatrix::findOrFail($id);
+            
+            // Get the sub-trait to check max_raw_score constraint
+            $subTrait = SubTrait::findOrFail($validated['subtrait_id']);
+            
+            // Validate max_score against sub-trait's max_raw_score
+            if ($validated['max_score'] > $subTrait->max_raw_score) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Max score ({$validated['max_score']}) cannot exceed the sub-trait's maximum raw score ({$subTrait->max_raw_score})."
+                ], 422);
+            }
             
             // Check for overlapping ranges (excluding current record)
             $overlapping = SubTraitScoreMatrix::where('subtrait_id', $validated['subtrait_id'])
@@ -321,7 +358,18 @@ class ScoreMatrixController extends Controller
     public function getTraits()
     {
         try {
-            $traits = TraitModel::with('subTraits')->orderBy('title')->get();
+            $traits = TraitModel::with('subTraits')
+                ->orderBy('title')
+                ->get()
+                ->map(function($trait) {
+                    return [
+                        'id' => $trait->id,
+                        'title' => $trait->title,
+                        'max_raw_score' => $trait->max_raw_score,
+                        'sub_traits' => $trait->subTraits
+                    ];
+                });
+            
             return response()->json([
                 'success' => true,
                 'data' => $traits
@@ -365,6 +413,17 @@ class ScoreMatrixController extends Controller
         ]);
 
         try {
+            // Get the trait to check max_raw_score constraint
+            $trait = TraitModel::findOrFail($validated['trait_id']);
+            
+            // Validate max_score against trait's max_raw_score
+            if ($validated['max_score'] > $trait->max_raw_score) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Max score ({$validated['max_score']}) cannot exceed the trait's maximum raw score ({$trait->max_raw_score})."
+                ], 422);
+            }
+
             // Check for overlapping ranges
             $overlapping = TraitScoreMatrix::where('trait_id', $validated['trait_id'])
                 ->where(function($query) use ($validated) {
@@ -413,6 +472,17 @@ class ScoreMatrixController extends Controller
 
         try {
             $matrix = TraitScoreMatrix::findOrFail($id);
+            
+            // Get the trait to check max_raw_score constraint
+            $trait = TraitModel::findOrFail($validated['trait_id']);
+            
+            // Validate max_score against trait's max_raw_score
+            if ($validated['max_score'] > $trait->max_raw_score) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Max score ({$validated['max_score']}) cannot exceed the trait's maximum raw score ({$trait->max_raw_score})."
+                ], 422);
+            }
             
             // Check for overlapping ranges (excluding current record)
             $overlapping = TraitScoreMatrix::where('trait_id', $validated['trait_id'])

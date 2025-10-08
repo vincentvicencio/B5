@@ -16,9 +16,7 @@ $(document).ready(function () {
     
     // Setup delete confirmation
     Common.setupDeleteConfirmation(API_BASE_URL, function (deletedId) {
-        // Show success toast
         Common.showToast('Interpretation deleted successfully.');
-        // Reload both sections after deletion
         loadInterpretations('sub-trait');
         loadInterpretations('trait');
     });
@@ -37,6 +35,26 @@ $(document).ready(function () {
             );
         }
     });
+
+    // Add Enter key handler for interpretation modal
+    $('#interpretationModal').on('keypress', function(e) {
+        if (e.which === 13 && !e.shiftKey) {
+            // Allow Shift+Enter for new lines in textarea
+            if ($(e.target).is('textarea')) {
+                return true;
+            }
+            e.preventDefault();
+            saveInterpretation();
+        }
+    });
+
+    // Prevent form submission on Enter in inputs (but allow in textarea with Shift)
+    $('#interpretationForm input').on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            saveInterpretation();
+        }
+    });
 });
 
 /**
@@ -51,12 +69,10 @@ function loadInterpretationTypes() {
         },
         success: function (response) {
             if (response.success) {
-                // Store types in an object for easy lookup
                 response.data.forEach(type => {
                     interpretationTypes[type.name.toLowerCase().replace(/\s+/g, '-')] = type.id;
                 });
                 
-                // Load both sections
                 loadInterpretations('sub-trait');
                 loadInterpretations('trait');
             }
@@ -84,7 +100,6 @@ window.loadInterpretations = function (type) {
         </div>
     `);
 
-    // Get the type ID based on the type parameter
     const typeKey = type === 'sub-trait' ? 'sub-trait-standard' : 'trait-standard';
     const typeId = interpretationTypes[typeKey];
 
@@ -174,7 +189,7 @@ function createInterpretationCard(item, index, type) {
 
                     <div class="interpretation-content flex-grow-1">
                         <span class="trait-level-label">Trait Level</span>
-                        <div class="trait-level-value">${escapeHtml(item.trait_level)}</div>
+                        <div class="trait-level-value mb-3">${escapeHtml(item.trait_level)}</div>
                         
                         <span class="interpretation-label">Interpretation</span>
                         <div class="interpretation-text">
@@ -183,12 +198,12 @@ function createInterpretationCard(item, index, type) {
                     </div>
 
                     <div class="card-actions d-flex ms-3">
-                        <button class="btn btn-link btn-edit p-1 me-1" 
+                        <button class="btn btn-link btn-edit p-2" 
                                 onclick="showEditInterpretationModal(${item.id}, '${type}')" 
                                 title="Edit">
-                            <i class="bi bi-pencil fs-5"></i>
+                            <i class="bi bi-pencil-square fs-5"></i>
                         </button>
-                        <button class="btn btn-link btn-delete p-1" 
+                        <button class="btn btn-link btn-delete p-2" 
                                 data-item-id="${item.id}" 
                                 data-type="${type}"
                                 title="Delete">
@@ -200,6 +215,7 @@ function createInterpretationCard(item, index, type) {
         </div>
     `;
 }
+
 /**
  * Show modal for adding new interpretation
  */
@@ -215,11 +231,13 @@ window.showAddInterpretationModal = function (type) {
     $('#traitLevel').val('');
     $('#interpretationText').val('');
     
-    // Set the type ID
     const typeKey = type === 'sub-trait' ? 'sub-trait-standard' : 'trait-standard';
     $('#interpretationTypeId').val(interpretationTypes[typeKey]);
     
     interpretationModal.show();
+    
+    // Focus on first input
+    setTimeout(() => $('#traitLevel').focus(), 300);
 };
 
 /**
@@ -232,7 +250,6 @@ window.showEditInterpretationModal = function (id, type) {
         ? 'Edit Sub-Trait Interpretation' 
         : 'Edit Trait Interpretation';
     
-    // Fetch the interpretation data
     $.ajax({
         url: `${API_BASE_URL}/${id}`,
         type: 'GET',
@@ -250,6 +267,9 @@ window.showEditInterpretationModal = function (id, type) {
                 $('#interpretationText').val(data.interpretation);
                 
                 interpretationModal.show();
+                
+                // Focus on first input
+                setTimeout(() => $('#traitLevel').focus(), 300);
             }
         },
         error: function () {
@@ -267,7 +287,6 @@ window.saveInterpretation = function () {
     const level = $('#traitLevel').val().trim();
     const interpretation = $('#interpretationText').val().trim();
 
-    // Validation
     if (!typeId || !level || !interpretation) {
         Common.showToast('Please fill out all required fields.', 1);
         return;

@@ -25,8 +25,52 @@ $(document).ready(function () {
         updateTraitSubTraitsDisplay($(this).val());
     });
 
+    // Enter key handlers for all modals
+    setupEnterKeyHandlers();
+
     loadAllData();
 });
+
+function setupEnterKeyHandlers() {
+    // Likert Scale Modal
+    $('#likertScaleModal').on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            saveLikertScale();
+        }
+    });
+
+    // Sub-Trait Matrix Modal
+    $('#subTraitMatrixModal').on('keypress', function(e) {
+        if (e.which === 13 && !$(e.target).is('select')) {
+            e.preventDefault();
+            saveSubTraitMatrix();
+        }
+    });
+
+    // Trait Matrix Modal
+    $('#traitMatrixModal').on('keypress', function(e) {
+        if (e.which === 13 && !$(e.target).is('select')) {
+            e.preventDefault();
+            saveTraitMatrix();
+        }
+    });
+
+    // Handle Enter key in select elements to trigger save
+    $('#subTraitSelect, #subTraitInterpretationSelect').on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            saveSubTraitMatrix();
+        }
+    });
+
+    $('#traitSelect, #traitInterpretationSelect').on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            saveTraitMatrix();
+        }
+    });
+}
 
 function loadAllData() {
     loadLikertScales();
@@ -100,6 +144,9 @@ window.showAddLikertModal = function () {
     $('#likertValue').val('');
     $('#likertLabel').val('');
     likertModal.show();
+    
+    // Focus on first input
+    setTimeout(() => $('#likertValue').focus(), 300);
 };
 
 window.editLikertScale = function (id) {
@@ -111,6 +158,9 @@ window.editLikertScale = function (id) {
     $('#likertValue').val(scale.value);
     $('#likertLabel').val(scale.label);
     likertModal.show();
+    
+    // Focus on first input
+    setTimeout(() => $('#likertValue').focus(), 300);
 };
 
 window.saveLikertScale = function () {
@@ -237,9 +287,29 @@ function populateSubTraitDropdown(selectId, data) {
     const select = $(`#${selectId}`);
     select.empty();
     select.append(`<option value="">Select Sub-Trait</option>`);
+    
+    // Group sub-traits by parent trait
+    const grouped = {};
     data.forEach(item => {
-        const traitName = item.trait ? ` (${item.trait.title})` : '';
-        select.append(`<option value="${item.id}">${escapeHtml(item.subtrait_name)}${traitName}</option>`);
+        const traitTitle = item.trait ? item.trait.title : 'No Trait';
+        const traitId = item.trait ? item.trait.id : 0;
+        
+        if (!grouped[traitId]) {
+            grouped[traitId] = {
+                title: traitTitle,
+                subTraits: []
+            };
+        }
+        grouped[traitId].subTraits.push(item);
+    });
+    
+    // Add optgroups for each trait
+    Object.values(grouped).forEach(group => {
+        const optgroup = $(`<optgroup label="${escapeHtml(group.title)}"></optgroup>`);
+        group.subTraits.forEach(item => {
+            optgroup.append(`<option value="${item.id}">${escapeHtml(item.subtrait_name)}</option>`);
+        });
+        select.append(optgroup);
     });
 }
 
@@ -275,10 +345,8 @@ function updateTraitSubTraitsDisplay(traitId) {
         return;
     }
 
-    // Create button-style display without score ranges
     let html = '<div class="d-flex flex-wrap gap-2">';
     trait.sub_traits.forEach(subTrait => {
-        // Check if sub-trait is configured
         const matrices = subTraitMatrices.filter(m => m.subtrait_id === subTrait.id);
         const configuredClass = matrices.length > 0 ? '' : 'not-configured';
         
@@ -335,7 +403,7 @@ function renderSubTraitMatrices() {
                 <td class="text-center">${index + 1}</td>
                 <td><strong>${subTraitName}</strong></td>
                 <td>${parentTrait}</td>
-                <td><span class="badge bg-secondary">${matrix.min_score} - ${matrix.max_score}</span></td>
+                <td>${matrix.min_score} - ${matrix.max_score}</td>
                 <td>${interpretationLevel}</td>
                 <td class="text-muted small">${updatedDate}</td>
                 <td class="text-center">
@@ -361,6 +429,9 @@ window.showAddSubTraitMatrixModal = function () {
     $('#subTraitMaxScore').val('');
     $('#subTraitInterpretationSelect').val('');
     subTraitMatrixModal.show();
+    
+    // Focus on first select
+    setTimeout(() => $('#subTraitSelect').focus(), 300);
 };
 
 window.editSubTraitMatrix = function (id) {
@@ -375,6 +446,9 @@ window.editSubTraitMatrix = function (id) {
     $('#subTraitInterpretationSelect').val(matrix.interpretation_id);
     
     subTraitMatrixModal.show();
+    
+    // Focus on first select
+    setTimeout(() => $('#subTraitSelect').focus(), 300);
 };
 
 window.saveSubTraitMatrix = function () {
@@ -484,41 +558,71 @@ function renderTraitMatrices() {
         const traitName = group.trait ? escapeHtml(group.trait.title) : 'Unknown Trait';
         const subTraitsList = group.trait?.sub_traits || [];
         
-        html += `
-            <div class="trait-config-card">
-                <div class="mb-3">
-                    <div class="trait-title">${traitName}</div>
-                    <div class="text-muted small mt-2">
-                        ${subTraitsList.map(st => `<span class="sub-trait-pill">${escapeHtml(st.subtrait_name)}</span>`).join('')}
-                    </div>
-                </div>
-        `;
-
-        group.matrices.forEach(matrix => {
-            const interpretationLevel = matrix.interpretation ? escapeHtml(matrix.interpretation.trait_level) : 'N/A';
-            
+         // Trait Card Header (Trait Name and Sub-Traits)
             html += `
-                <div class="trait-score-row">
-                    <div>
-                        <span class="fw-bold me-2">Total Range:</span>
-                        <span class="badge bg-secondary">${matrix.min_score} - ${matrix.max_score}</span>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <span class="badge bg-primary me-2">${interpretationLevel}</span>
-                        <div class="btn-group btn-group-sm">
-                            <button class="btn btn-outline-secondary" onclick="editTraitMatrix(${matrix.id})" title="Edit">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button class="btn btn-outline-danger" onclick="deleteTraitMatrix(${matrix.id})" title="Delete">
-                                <i class="bi bi-trash"></i>
-                            </button>
+                <div class="trait-config-card">
+                    <div class="mb-3 pb-3 border-bottom border-gray-200">
+                        <div class="trait-title">${traitName}</div>
+                        <div class="text-muted small mt-2 d-flex flex-wrap gap-2">
+                            ${subTraitsList.map(st => `<span class="sub-trait-pill">${escapeHtml(st.subtrait_name)}</span>`).join('')}
                         </div>
                     </div>
-                </div>
             `;
-        });
 
-        html += `</div>`;
+            group.matrices.forEach((matrix, index) => {
+                const interpretationLevel = matrix.interpretation ? escapeHtml(matrix.interpretation.trait_level) : 'N/A';
+                
+                // New structured row based on the prototype image
+                html += `
+                   <div class="trait-score-row" data-matrix-id="${matrix.id}">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center">
+                                <!-- Index Number -->
+                                <div class="traitscore-number me-4 flex-shrink-0">
+                                    ${index + 1}
+                                </div>
+            
+                                <!-- Score Range and Interpretation content -->
+                                <div class="traitscore-content flex-grow-1">
+                                    <div class="row g-3">
+                                        <!-- Score Range Column (Made col-6 for small screens and allowed it to grow) -->
+                                        <div class="col-12 col-md-4">
+                                            <span class="trait-score-label mb-3">Score Range</span>
+                                            <div class="fw-bold">
+                                                <span class="trait-score-value">${matrix.min_score} - ${matrix.max_score}</span>
+                                            </div> 
+                                        </div>
+
+                                        <!-- Interpretation Level Column (Made col-8 for small screens and allowed it to grow) -->
+                                        <div class="col-12 col-md-8">
+                                            <span class="trait-score-label mb-3">Interpretation</span>
+                                            <div class="fw-bold">
+                                                <span class="trait-score-value">${interpretationLevel}</span>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <!-- Card Actions -->
+                                <div class="card-actions d-flex ms-3 flex-shrink-0">
+                                    <button class="btn btn-link btn-edit p-2" 
+                                            onclick="editTraitMatrix(${matrix.id})" 
+                                            title="Edit">
+                                        <i class="bi bi-pencil-square fs-5 text-secondary"></i>
+                                    </button>
+                                    <button class="btn btn-link btn-delete p-2" 
+                                            onclick="deleteTraitMatrix(${matrix.id})" 
+                                            title="Delete">
+                                        <i class="bi bi-trash fs-5 text-danger"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
     });
 
     container.html(html);
@@ -532,6 +636,9 @@ window.showAddTraitModal = function () {
     $('#traitMaxScore').val('');
     $('#traitInterpretationSelect').val('');
     traitMatrixModal.show();
+    
+    // Focus on first select
+    setTimeout(() => $('#traitSelect').focus(), 300);
 };
 
 window.editTraitMatrix = function (id) {
@@ -546,6 +653,9 @@ window.editTraitMatrix = function (id) {
     $('#traitInterpretationSelect').val(matrix.interpretation_id);
     
     traitMatrixModal.show();
+    
+    // Focus on first select
+    setTimeout(() => $('#traitSelect').focus(), 300);
 };
 
 window.saveTraitMatrix = function () {
