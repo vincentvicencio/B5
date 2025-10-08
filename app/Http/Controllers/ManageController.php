@@ -9,9 +9,20 @@ use Illuminate\Validation\Rule;
 use App\Models\TraitModel; 
 use App\Models\SubTrait;
 use App\Models\Question;
+use App\Models\LikertScale; // Import the LikertScale model
 
 class ManageController extends Controller
 {
+    /**
+     * Get the highest 'value' from the likert_scales table.
+     * @return int
+     */
+    private function getMaxLikertValue(): int
+    {
+        // Assumes at least one record exists. Default to 5 if the table is empty.
+        return LikertScale::max('value') ?? 5; 
+    }
+
     public function index()
     {
         $traits = TraitModel::with('subTraits')->get();
@@ -39,34 +50,53 @@ class ManageController extends Controller
         try {
             DB::beginTransaction();
 
-            // 1. Create Trait
+            $maxLikertValue = $this->getMaxLikertValue();
+            $totalTraitMaxScore = 0;
+            $subTraitMaxScores = [];
+
+            // Group questions by subTrait name for easy counting
+            $questionsBySubTrait = collect($validated['questions'])->groupBy('subTrait');
+
+            // 1. Calculate Max Scores for SubTraits and Trait
+            foreach ($validated['subTraits'] as $subTraitName) {
+                // Count how many questions belong to this subtrait
+                $questionCount = $questionsBySubTrait->has($subTraitName) 
+                                 ? $questionsBySubTrait->get($subTraitName)->count()
+                                 : 0;
+                
+                // Calculate max score for this subtrait
+                $subTraitMaxScore = $maxLikertValue * $questionCount;
+                $subTraitMaxScores[$subTraitName] = $subTraitMaxScore;
+                $totalTraitMaxScore += $subTraitMaxScore; // Sum up for the trait total
+            }
+
+            // 2. Create Trait with the calculated max_raw_score
             $trait = TraitModel::create([
                 'title' => $validated['traitTitle'],
                 'description' => $validated['traitDescription'],
                 'trait_display_color' => $validated['traitColor'],
-                'max_raw_score' => 100, 
+                'max_raw_score' => $totalTraitMaxScore, // <--- MODIFIED
             ]);
 
             $subTraitMap = [];
 
-            // 2. Create SubTraits
+            // 3. Create SubTraits with their calculated max_raw_score
             foreach ($validated['subTraits'] as $subTraitName) {
                 $subTrait = $trait->subTraits()->create([
                     'subtrait_name' => $subTraitName,
-                    'max_raw_score' => 50, // Default score
+                    'max_raw_score' => $subTraitMaxScores[$subTraitName], // <--- MODIFIED
                 ]);
                 
                 $subTraitMap[$subTraitName] = $subTrait->id;
             }
 
-            // 3. Create Questions
+            // 4. Create Questions
             foreach ($validated['questions'] as $questionData) {
-                // Find the associated sub_trait_id using the map
                 $subTraitId = $subTraitMap[$questionData['subTrait']] ?? null;
 
                 if ($subTraitId) {
                     Question::create([
-                        'subtrait_id' => $subTraitId, // Use subtrait_id as per model fix
+                        'subtrait_id' => $subTraitId,
                         'question_text' => $questionData['text'],
                     ]);
                 }
@@ -87,23 +117,18 @@ class ManageController extends Controller
             // DEBUGGING: Return specific error
             return response()->json([
                 'success' => false,
-                'error' => 'DEBUG: ' . $e->getMessage(), // Expose the error temporarily
+                'error' => 'DEBUG: ' . $e->getMessage(),
                 'message' => 'A server error occurred while saving the data.',
             ], 500);
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         // Not implemented
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(string $id)
     {
         // Eager load subTraits and questions, and fail if not found
@@ -118,7 +143,7 @@ class ManageController extends Controller
             foreach ($subTrait->questions as $question) {
                 $questions[] = [
                     'subTrait' => $subTrait->subtrait_name, // Key name matches JS structure
-                    'text' => $question->question_text,       // Key name matches JS structure
+                    'text' => $question->question_text,  // Key name matches JS structure
                 ];
             }
         }
@@ -126,10 +151,7 @@ class ManageController extends Controller
         // Pass all three required variables to the view
         return view('manage.edit', compact('trait', 'subTraits', 'questions'));
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
+    
     public function update(Request $request, string $id)
     {
         $validated = $request->validate([
@@ -150,12 +172,32 @@ class ManageController extends Controller
             
             $trait = TraitModel::findOrFail($id);
 
-            // 1. Update Trait Details
+            $maxLikertValue = $this->getMaxLikertValue();
+            $totalTraitMaxScore = 0;
+            $subTraitMaxScores = [];
+
+            // Group questions by subTrait name for easy counting
+            $questionsBySubTrait = collect($validated['questions'])->groupBy('subTrait');
+
+            // 1. Calculate Max Scores for SubTraits and Trait
+            foreach ($validated['subTraits'] as $subTraitName) {
+                // Count how many questions belong to this subtrait
+                $questionCount = $questionsBySubTrait->has($subTraitName) 
+                                 ? $questionsBySubTrait->get($subTraitName)->count()
+                                 : 0;
+                
+                // Calculate max score for this subtrait
+                $subTraitMaxScore = $maxLikertValue * $questionCount;
+                $subTraitMaxScores[$subTraitName] = $subTraitMaxScore;
+                $totalTraitMaxScore += $subTraitMaxScore; // Sum up for the trait total
+            }
+
+            // 2. Update Trait Details with the new total score
             $trait->update([
                 'title' => $validated['traitTitle'],
                 'description' => $validated['traitDescription'],
                 'trait_display_color' => $validated['traitColor'],
-                'max_raw_score' => 100, // Keep default for now
+                'max_raw_score' => $totalTraitMaxScore, // <--- MODIFIED
             ]);
 
             // --- SubTrait and Question synchronization ---
@@ -165,40 +207,39 @@ class ManageController extends Controller
             $subTraitMap = []; // To map submitted name to new/existing ID
             $subTraitIdsToKeep = []; // To track which existing SubTraits survived
 
-            // 2. Process SubTraits (Update/Create)
+            // 3. Process SubTraits (Update/Create)
             foreach ($validated['subTraits'] as $name) {
                 $subTrait = $existingSubTraits->get($name);
+                $maxScore = $subTraitMaxScores[$name]; // Get the pre-calculated score
 
                 if ($subTrait) {
-                    // Existing SubTrait: Use its ID
+                    // Existing SubTrait: Update name and score (though name shouldn't change here)
+                    $subTrait->update([
+                        'max_raw_score' => $maxScore, // <--- MODIFIED
+                    ]);
                     $subTraitIdsToKeep[] = $subTrait->id;
                 } else {
-                    // New SubTrait: Create it
+                    // New SubTrait: Create it with its score
                     $subTrait = $trait->subTraits()->create([
                         'subtrait_name' => $name,
-                        'max_raw_score' => 50,
+                        'max_raw_score' => $maxScore, // <--- MODIFIED
                     ]);
                 }
                 $subTraitMap[$name] = $subTrait->id;
             }
 
-            // 3. Delete old SubTraits (and their cascadingly deleted questions)
-            // Get IDs of ALL current SubTraits, and filter those NOT in $subTraitIdsToKeep
+            // 4. Delete old SubTraits (and their cascadingly deleted questions)
             $subTraitIdsToDelete = $existingSubTraits->pluck('id')->diff($subTraitIdsToKeep);
             SubTrait::whereIn('id', $subTraitIdsToDelete)->delete();
             
             
-            // 4. Synchronization of Questions (The "replace all" strategy)
-
-            // Get the IDs of ALL SubTraits *currently* associated with the Trait (the survivors + the new ones)
-            // We use a fresh query to ensure we have the IDs of the newly created SubTraits.
+            // 5. Synchronization of Questions (The "replace all" strategy)
             $allCurrentSubTraitIds = SubTrait::where('trait_id', $trait->id)->pluck('id');
             
             // CRITICAL FIX: Delete all existing questions tied to the remaining/new SubTraits.
-            // This ensures that any questions deleted on the front end are removed from the database.
             Question::whereIn('subtrait_id', $allCurrentSubTraitIds)->delete();
 
-            // 5. Insert New Questions
+            // 6. Insert New Questions
             $questionsToInsert = [];
             foreach ($validated['questions'] as $questionData) {
                 $subTraitId = $subTraitMap[$questionData['subTrait']] ?? null;

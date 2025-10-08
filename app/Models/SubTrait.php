@@ -17,6 +17,19 @@ class SubTrait extends Model
         'max_raw_score',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($subTrait) {
+            // Retrieve all associated questions and delete them one by one.
+            // This is more reliable than $subTrait->questions()->delete() for cascade chains.
+            $subTrait->questions->each(function ($question) {
+                $question->delete();
+            });
+        });
+    }
+
     /**
      * A SubTrait belongs to a single Trait.
      */
@@ -26,13 +39,9 @@ class SubTrait extends Model
         return $this->belongsTo(TraitModel::class, 'trait_id');
     }
 
-    /**
-     * A SubTrait can have many Questions.
-     */
     public function questions(): HasMany
     {
-        // FIX: Explicitly define the foreign key as 'subtrait_id' 
-        // to resolve the "Unknown column 'sub_trait_id'" error.
+        // Explicitly define the foreign key as 'subtrait_id' 
         return $this->hasMany(Question::class, 'subtrait_id');
     }
 }

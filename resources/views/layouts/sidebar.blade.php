@@ -28,12 +28,12 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link " href="#">
+            <a class="nav-link {{ request()->routeIs('score-matrix') ? 'active' : '' }}" href="{{ route('score-matrix') }}">
                 <i class="bi bi-star"></i> Score Matrix
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{route('interpretation')}}">
+            <a class="nav-link {{ request()->routeIs('interpretation') ? 'active' : '' }}" href="{{ route('interpretation') }}">
                 <i class="bi bi-lightbulb"></i> Interpretation
             </a>
         </li>

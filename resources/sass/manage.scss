@@ -6,7 +6,6 @@
 .manage-title, 
 .trait-title, 
 .questions-list-title, 
-.modal-title-custom, 
 .form-label, 
 .input-group .input-group-text, 
 .sub-trait-group-container h6, 
@@ -162,6 +161,19 @@
         margin-bottom: 0;
     }
 }
+
+ .save-btn {
+        background: $header-text-color;
+        color: white;
+
+        &:hover {
+             background-color: $hover;
+        border-color: $hover;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        color: $white
+        }
+    }
 
 // --- Primary Button Group (Consolidated) ---
 .btn-primary,

@@ -248,8 +248,8 @@ function renderAddedQuestions() {
                         <span class="fw-semibold text-muted me-2">${questionNumber}.</span> ${q.text}
                     </span>
                     <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary border-0" onclick="editQuestion(${originalIndex})" title="Edit Question"><i class="bi bi-pencil-square"></i></button>
-                        <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="deleteQuestion(${originalIndex})" title="Delete Question"><i class="bi bi-trash"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary border-0 fs-5" onclick="editQuestion(${originalIndex})" title="Edit Question"><i class="bi bi-pencil-square"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-danger border-0 fs-5" onclick="deleteQuestion(${originalIndex})" title="Delete Question"><i class="bi bi-trash"></i></button>
                     </div>
                 `;
 
@@ -414,6 +414,18 @@ function addQuestionToList() {
         return;
     }
 
+    // --- NEW DUPLICATE CHECK ---
+    const isDuplicate = questions.some(q => q.text.trim().toLowerCase() === text.toLowerCase());
+
+    if (isDuplicate) {
+        showTemporaryMessage(
+            "This question already exists. Please enter a unique question.",
+            "warning"
+        );
+        return;
+    }
+    // ----------------------------
+
     const newQuestion = { subTrait: subTrait, text: text };
     questions.push(newQuestion);
     showTemporaryMessage("Question added successfully.", "success");
@@ -466,17 +478,18 @@ function confirmEditQuestion() {
         return;
     }
 
-    // 2. NEW: CHANGE DETECTION LOGIC
     if (oldQuestion.subTrait === newSubTrait && oldQuestion.text === newText) {
-        showTemporaryMessage("No changes detected.", "info");
-        
-        const modalInstance =
-            DOM.editQuestionModal ||
-            bootstrap.Modal.getInstance(DOM.editQuestionModalElement);
-        if (modalInstance) modalInstance.hide();
-        currentQuestionIndex = null;
-        return; 
-    }
+    showTemporaryMessage("No changes detected.", "info");
+    
+    // Modal instance was re-calculated here, which is fine, but now it's done once at the start.
+    const modalInstance = 
+        DOM.editQuestionModal ||
+        bootstrap.Modal.getInstance(DOM.editQuestionModalElement);
+    // If statement added for robustness:
+    if (modalInstance) modalInstance.hide();
+    currentQuestionIndex = null;
+    return; 
+}
 
     // 3. APPLY CHANGE:
     oldQuestion.subTrait = newSubTrait;

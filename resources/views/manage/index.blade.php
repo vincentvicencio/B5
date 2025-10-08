@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 
-                <div class="trait-body">
+                <div class="trait-body border-0">
                     <a href="{{ route('manage.edit', $trait->id) }}" class="edit-btn text-black">Edit Questions</a>
                 </div>
             </div>
