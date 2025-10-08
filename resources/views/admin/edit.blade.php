@@ -83,18 +83,22 @@
 
             <div class="mb-3">
                 <label for="edit_password" class="form-label fw-medium">Password</label>
-                <input type="password" 
-                       class="form-control @error('password') is-invalid @enderror" 
-                       id="edit_password" 
-                       name="password" 
-                       placeholder="Enter new password" 
-                       autocomplete="new-password">
+                <div class="input-group">
+                    <input type="password" 
+                           class="form-control @error('password') is-invalid @enderror" 
+                           id="edit_password" 
+                           name="password" 
+                           placeholder="Enter new password" 
+                           autocomplete="new-password">
+                    <button class="btn btn-outline-secondary" type="button" id="toggleEditPassword">
+                        <i class="bi bi-eye-slash" id="editPasswordIcon"></i>
+                    </button>
+                </div>
                 <div class="form-text text-muted">Leave blank to keep the existing password.</div>
                 @error('password')
-                    <div class="invalid-feedback">{{ $message }}</div>
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
                 @enderror
             </div>
-
 
             <div class="d-flex justify-content-end gap-2 mt-5">
                 <button type="button" class="btn btn-light" data-bs-dismiss="offcanvas">Cancel</button>
@@ -106,3 +110,29 @@
     </div>
 @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </div>
+
+<script>
+// Password toggle functionality for edit form
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleEditPassword = document.getElementById('toggleEditPassword');
+    const editPassword = document.getElementById('edit_password');
+    const editPasswordIcon = document.getElementById('editPasswordIcon');
+
+    if (toggleEditPassword) {
+        toggleEditPassword.addEventListener('click', function() {
+            // Toggle password visibility
+            const type = editPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            editPassword.setAttribute('type', type);
+            
+            // Toggle icon
+            if (type === 'password') {
+                editPasswordIcon.classList.remove('bi-eye');
+                editPasswordIcon.classList.add('bi-eye-slash');
+            } else {
+                editPasswordIcon.classList.remove('bi-eye-slash');
+                editPasswordIcon.classList.add('bi-eye');
+            }
+        });
+    }
+});
+</script>

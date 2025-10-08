@@ -3,6 +3,6 @@
         <div class="d-flex align-items-center">
             <img src="{{ asset('images/magellan.png') }}" alt="Magellan Solutions Logo" class="img-fluid">
         </div>
-        @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+        @vite(['resources/sass/app.scss'])
     </div>
 </header>
