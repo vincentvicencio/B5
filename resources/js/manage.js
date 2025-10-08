@@ -1,4 +1,3 @@
-
 import './bootstrap'; 
 import Chart from 'chart.js/auto';
 window.Chart = Chart;
@@ -274,7 +273,7 @@ function renderAddedQuestions() {
     });
 }
 
-// --- ACTION FUNCTIONS (EXPORT REMOVED) ---
+// --- ACTION FUNCTIONS ---
 
 function addSubTraitFromInput() {
     const name = DOM.newSubTraitInput.value.trim();
@@ -326,27 +325,33 @@ function editSubTrait(oldName, index = null) {
     );
 }
 
+// 🐛 MODIFIED: Fixed the case-insensitive "Name unchanged" bug.
 function saveEditedSubTrait() {
     const newName = DOM.newSubTraitNameInput.value;
     const trimmedNewName = newName.trim();
+    // Define the lowercase version once
+    const trimmedNewNameLower = trimmedNewName.toLowerCase();
 
     const oldName = subTraits[currentSubTraitIndex];
+    const oldNameLower = oldName.toLowerCase(); // Define the lowercase old name
 
     const modalInstance =
         DOM.editSubTraitModal ||
         bootstrap.Modal.getInstance(DOM.editSubTraitModalElement);
     if (modalInstance) modalInstance.hide();
 
-    if (trimmedNewName === "" || trimmedNewName === oldName) {
+    // 1. Corrected 'Name Unchanged' Check (case-insensitive)
+    if (trimmedNewName === "" || trimmedNewNameLower === oldNameLower) {
         showTemporaryMessage("Name unchanged or invalid.", "info");
         return;
     }
 
+    // 2. Duplicate Check (correctly excluding the current item)
     if (
         subTraits
             .map((s) => s.toLowerCase())
             .filter((_, i) => i !== currentSubTraitIndex)
-            .includes(trimmedNewName.toLowerCase())
+            .includes(trimmedNewNameLower) // Use the pre-calculated lowercase name
     ) {
         showTemporaryMessage(
             `Sub-Trait "${trimmedNewName}" already exists.`,
@@ -355,6 +360,7 @@ function saveEditedSubTrait() {
         return;
     }
 
+    // Update questions (using the original name)
     questions = questions.map((q) => {
         if (q.subTrait === oldName) {
             q.subTrait = trimmedNewName;
@@ -362,6 +368,7 @@ function saveEditedSubTrait() {
         return q;
     });
 
+    // Update the subTraits array
     subTraits[currentSubTraitIndex] = trimmedNewName;
 
     showTemporaryMessage(
@@ -372,17 +379,70 @@ function saveEditedSubTrait() {
     renderSubTraits();
 }
 
+/**
+ * 💥 MODIFIED FUNCTION: Now shows the confirmation modal instead of deleting immediately.
+ * @param {number} index - The index of the sub-trait in the subTraits array.
+ */
 function removeSubTraitChip(index) {
-    const nameToRemove = subTraits[index];
+    if (!subTraits[index]) {
+        showTemporaryMessage("Error: Sub-Trait not found.", "danger");
+        return;
+    }
 
+    // Store the index for the confirmation function
+    currentSubTraitIndex = index;
+    const nameToRemove = subTraits[index];
+    
+    // Calculate how many questions will be removed
     const questionsRemovedCount = questions.filter(
         (q) => q.subTrait === nameToRemove
     ).length;
-    questions = questions.filter((q) => q.subTrait !== nameToRemove);
+    
+    // Get the generic confirmation modal element
+    const $modal = document.getElementById('deleteConfirmationModal');
 
-    if (index > -1) {
+    if ($modal) {
+        // 1. Set the Title/Message for the generic modal
+        document.getElementById('delete-title').textContent = "Confirm Subsection Deletion";
+        document.getElementById('delete-message').innerHTML = `
+            Are you sure you want to delete the subsection: 
+            <strong class="d-block mt-2 text-danger">${nameToRemove}</strong>
+            <p class="small text-muted mt-2 mb-0">
+                This will also remove ${questionsRemovedCount} associated question${questionsRemovedCount !== 1 ? 's' : ''}.
+            </p>
+        `;
+        
+        document.getElementById('delete_record_id').value = ''; 
+        
+        document.getElementById('btn_delete_ok').onclick = window.confirmDeleteSubTrait;
+
+        // 4. Show the modal
+        new bootstrap.Modal($modal).show();
+    }
+}
+
+function confirmDeleteSubTrait() {
+    const index = currentSubTraitIndex; 
+    
+    // Hide the generic modal using its ID
+    const modalElement = document.getElementById('deleteConfirmationModal');
+    if (modalElement) {
+        bootstrap.Modal.getInstance(modalElement)?.hide();
+    }
+
+    if (subTraits[index]) {
+        const nameToRemove = subTraits[index];
+
+        // 1. Filter out the questions associated with this subTrait
+        const questionsRemovedCount = questions.filter(
+            (q) => q.subTrait === nameToRemove
+        ).length;
+        questions = questions.filter((q) => q.subTrait !== nameToRemove);
+
+        // 2. Remove the subTrait itself
         subTraits.splice(index, 1);
 
+        // 3. Reset the selected value in the 'Add Question' form if it was the one deleted
         if (DOM.questionSubTraitSelect.value === nameToRemove) {
             const defaultOption = DOM.questionSubTraitSelect.querySelector(
                 "option[disabled]"
@@ -392,13 +452,19 @@ function removeSubTraitChip(index) {
                 : "";
         }
 
+        // 4. Re-render the UI and show message
         showTemporaryMessage(
-            `Sub-Trait "${nameToRemove}" removed. (${questionsRemovedCount} questions also removed).`,
+            `Subsection "${nameToRemove}" removed. (${questionsRemovedCount} questions also removed).`,
             "warning"
         );
         renderSubTraits();
         renderAddedQuestions();
     }
+    
+    // Reset the index and modal content after deletion
+    currentSubTraitIndex = null;
+    document.getElementById('delete-title').textContent = "Confirm Deletion"; 
+    document.getElementById('delete-message').innerHTML = ''; 
 }
 
 function addQuestionToList() {
@@ -414,7 +480,6 @@ function addQuestionToList() {
         return;
     }
 
-    // --- NEW DUPLICATE CHECK ---
     const isDuplicate = questions.some(q => q.text.trim().toLowerCase() === text.toLowerCase());
 
     if (isDuplicate) {
@@ -424,7 +489,6 @@ function addQuestionToList() {
         );
         return;
     }
-    // ----------------------------
 
     const newQuestion = { subTrait: subTrait, text: text };
     questions.push(newQuestion);
@@ -469,6 +533,7 @@ function confirmEditQuestion() {
     const index = currentQuestionIndex;
     const newSubTrait = DOM.editQuestionSubTraitSelect.value;
     const newText = DOM.editQuestionText.value.trim(); 
+    const newTextLower = newText.toLowerCase(); // New: Lowercase for comparison
     
     const oldQuestion = questions[index]; 
 
@@ -478,20 +543,34 @@ function confirmEditQuestion() {
         return;
     }
 
-    if (oldQuestion.subTrait === newSubTrait && oldQuestion.text === newText) {
-    showTemporaryMessage("No changes detected.", "info");
-    
-    // Modal instance was re-calculated here, which is fine, but now it's done once at the start.
-    const modalInstance = 
-        DOM.editQuestionModal ||
-        bootstrap.Modal.getInstance(DOM.editQuestionModalElement);
-    // If statement added for robustness:
-    if (modalInstance) modalInstance.hide();
-    currentQuestionIndex = null;
-    return; 
-}
+    // 2. Check if the content is completely unchanged (case-insensitive for text)
+    if (oldQuestion.subTrait === newSubTrait && oldQuestion.text.trim().toLowerCase() === newTextLower) {
+        showTemporaryMessage("No changes detected.", "info");
+        
+        const modalInstance = 
+            DOM.editQuestionModal ||
+            bootstrap.Modal.getInstance(DOM.editQuestionModalElement);
+        if (modalInstance) modalInstance.hide();
+        currentQuestionIndex = null;
+        return; 
+    }
 
-    // 3. APPLY CHANGE:
+    // 3. 🚨 NEW GLOBAL DUPLICATE CHECK (Edit) 🚨
+    const isDuplicate = questions
+        .filter((q, i) => i !== index) // Exclude the question we are currently editing
+        .some(q => q.text.trim().toLowerCase() === newTextLower);
+
+    if (isDuplicate) {
+        showTemporaryMessage(
+            "This question already exists. Please enter a unique question.",
+            "warning"
+        );
+        // Do not hide the modal, let the user correct the input
+        return; 
+    }
+    // END NEW GLOBAL DUPLICATE CHECK
+
+    // 4. APPLY CHANGE:
     oldQuestion.subTrait = newSubTrait;
     oldQuestion.text = newText;
 
@@ -713,10 +792,13 @@ function initManageLogic() {
     window.confirmDeleteQuestion = confirmDeleteQuestion;
     window.removeSubTrait = removeSubTraitChip;
     
+    // 💥 NEW MAPPING FOR SUB-TRAIT DELETION CONFIRMATION
+    window.confirmDeleteSubTrait = confirmDeleteSubTrait;
+    
     // Assign the event element
     managevent = document.getElementById("manage-index") 
-                 || document.getElementById("manage-create")
-                 || document.getElementById("manage-edit");
+             || document.getElementById("manage-create")
+             || document.getElementById("manage-edit");
 
     if (!managevent) {
         console.warn("Management container element not found. Event listeners may fail.");
@@ -759,12 +841,12 @@ function initManageIndexLogic() {
 
 function initManageCreateLogic() {
     initManageLogic(); 
-    initFormLogic();   
+    initFormLogic();   
 }
 
 function initManageEditLogic() {
     initManageLogic(); 
-    initFormLogic();   
+    initFormLogic();   
 }
 
 document.addEventListener('DOMContentLoaded', () => {
