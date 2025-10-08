@@ -18,7 +18,7 @@ class AdminController extends Controller
                     ->orWhere('employee_code', 'like', "%{$search}%");
     })
     ->orderBy('id', 'asc') 
-    ->paginate(5)
+    ->paginate(10)
     ->appends(['search' => $search]);
 
 

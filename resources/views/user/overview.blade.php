@@ -11,15 +11,13 @@
     img {
         max-height: 70px;
     }
-    
-    /* Styles for the "Intermediate Level" pill */
+
     .top {
         font-size: 1rem;
-        color: #1b5597;
+        color: #072F6D;
         background-color: #07306d3a;
     }
 
-    /* Main titles */
     .text1 {
         color: #1a1a1a;
     }
@@ -46,7 +44,7 @@
 
     .subtitle {
         color: #6c757d;
-        max-width: 750px;
+        max-width: 850px;
     }
 
     /* Info cards styling */
@@ -58,7 +56,6 @@
         padding: 2rem 1.5rem;
         height: 100%;
         text-align: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .icons {
@@ -186,7 +183,7 @@
             <div class="col-lg-10 col-xl-8">
                 
                 <span class="top d-inline-block px-3 py-1 fw-medium rounded-pill mb-4">
-                     <span class="bullet">● &nbsp;</span>
+                    <span class="bullet">●</span>
                     Intermediate Level
                 </span>
 
@@ -277,7 +274,7 @@
                     </p>
                 </div>
 
-                <a href="{{ route('assessment.personal-info') }}" class="btn btn-lg text-white assessment-button d-inline-flex align-items-center">
+                <a href="{{ route('personal-info') }}" class="btn btn-lg text-white assessment-button d-inline-flex align-items-center">
                     Start Your Assessment 
                     <i class="btn-bi bi bi-arrow-right ms-3"></i>
                 </a>

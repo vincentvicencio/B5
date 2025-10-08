@@ -33,7 +33,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{route('interpretation')}}">
+            <a class="nav-link {{ request()->routeIs('interpretation') ? 'active' : '' }}" href="{{route('interpretation')}}">
                 <i class="bi bi-lightbulb"></i> Interpretation
             </a>
         </li>

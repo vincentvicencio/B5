@@ -36,7 +36,7 @@
                         Evaluate candidates' personality traits with our scientifically-designed assessment. Get actionable insights for better hiring decisions.
                     </p>
 
-                    <a href="{{ route('assessment.overview') }}" class="btn btn-lg border-0 text-white assessment-button d-inline-flex align-items-center px-5 py-3 rounded-3">
+                    <a href="{{ route('overview') }}" class="btn btn-lg border-0 text-white assessment-button d-inline-flex align-items-center px-5 py-3 rounded-3">
                     Start Your Assessment
                     <i class=" btn-bi bi bi-arrow-right ms-3"></i>
                     </a>

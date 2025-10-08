@@ -2,8 +2,7 @@
 
 @section('content')
 <style>
-    
-    .container-logo{
+    .container-logo {
         background: linear-gradient(90deg, #072F6D 0%, rgba(27, 85, 151, 1) 100%);
         padding: 2.5rem;
         border-radius: 0.5rem;
@@ -12,7 +11,6 @@
     .container-logo img {
         max-height: 200px;
     }
-
 
     .banner-logo {
         max-width: 350px;
@@ -29,6 +27,7 @@
         border-radius: 1rem;
     }
 
+    /* --- Updated info-header with responsive layout --- */
     .info-header {
         background-color: #ffffff;
         border: 2px solid #072F6D;
@@ -36,30 +35,32 @@
         padding: 1.5rem;
         border-radius: 0.5rem;
         margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
     }
 
     .info-header .bi {
-        font-size: 2.5rem;
+        font-size: 3.5rem;
         color: #072F6D;
+        flex-shrink: 0;
     }
 
     .info-header h2 {
         color: #072F6D;
-        font-size: 2rem;
+        font-size: 1.75rem;
         font-weight: 600;
-        margin-bottom: 0.1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
+        margin: 0;
     }
 
     .info-header p {
         color: #6c757d;
         font-size: 0.9rem;
-        margin-bottom: 0;
-        margin-left: 3.5rem;
+        margin: 0;
     }
 
+    /* --- other form styles --- */
     .form-group {
         background-color: #ffffff;
         border: 1px solid #0000002a;
@@ -82,6 +83,7 @@
         margin-left: 0.25rem;
     }
 
+
     .form-group label .optional {
         color: #6c757d;
         font-weight: 400;
@@ -92,9 +94,10 @@
 
     .form-control {
         background: none;
+        padding: 0.2rem;
         border: none;
         border-radius: 0%;
-        border-bottom: 1px solid #24242485;
+        border-bottom: 1px solid #24242436;
         max-width: 60%;
         font-size: 0.95rem;
         transition: all 0.3s ease;
@@ -102,6 +105,12 @@
 
     .form-control.is-invalid {
         border-color: #dc3545;
+    }
+
+    .form-control:focus  {
+        background: none;
+        box-shadow: none;
+        outline: none;
     }
 
     .invalid-feedback {
@@ -153,12 +162,23 @@
     .btn-continue:hover {
         background-color: #072F6D;
         color: white;
-
     }
 
+    /* --- Responsive behavior for small screens --- */
     @media (max-width: 576px) {
         .container-logo img {
             max-height: 90px;
+        }
+
+        .info-header {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .info-header .bi {
+            font-size: 3.25rem;
+            margin-bottom: 0.5rem;
         }
 
         .button-group {
@@ -169,23 +189,26 @@
         .btn-continue {
             width: 100%;
         }
+
+        .form-control {
+            max-width: 100%;
+        }
     }
 </style>
 
 <main>
-
     <div class="form-container py-4">
-
         <div class="container-logo justify-content-center text-center mb-4">
             <img src="{{ asset('images/logo.png') }}" alt="Magellan Solutions" class="banner-logo">
         </div>
 
+        <!-- Updated Info Header -->
         <div class="info-header">
-            <h2>
-                <i class="bi bi-person-circle"></i>
-                Personal Information
-            </h2>
-            <p>Please provide your information to begin the assessment</p>
+            <i class="bi bi-person-circle"></i>
+            <div>
+                <h2>Personal Information</h2>
+                <p>Please provide your information to begin the assessment</p>
+            </div>
         </div>
 
         @if ($errors->any())
@@ -200,7 +223,7 @@
             </div>
         @endif
 
-        <form action="{{ route('assessment.personal-info.store') }}" method="POST">
+        <form action="{{ route('personal-info.store') }}" method="POST">
             @csrf
 
             <div class="form-group">
@@ -288,7 +311,7 @@
                     class="form-control @error('phone_number') is-invalid @enderror" 
                     id="phone_number" 
                     name="phone_number" 
-                    placeholder="+63 912 345 6789"
+                    placeholder="09XXXXXXXXX"
                     value="{{ old('phone_number') }}"
                     required
                 >
@@ -298,16 +321,14 @@
             </div>
 
             <div class="button-group">
-                <a href="{{ route('assessment.overview') }}" class="btn btn-back">
+                <a href="{{ route('overview') }}" class="btn btn-back">
                     Back
                 </a>
                 <button type="submit" class="btn btn-continue">
                     Continue to Assessment
-                    <i class="bi bi-arrow-right"></i>
                 </button>
             </div>
         </form>
     </div>
 </main>
-
 @endsection

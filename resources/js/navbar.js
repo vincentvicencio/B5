@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function() {
     const userDropdown = document.getElementById('userDropdown');
     const dropdownMenu = document.getElementById('userDropdownMenu');
