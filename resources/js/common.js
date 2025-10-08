@@ -73,7 +73,7 @@ class Common {
                     self.showToast(
                         xhr.responseJSON.message ||
                             "Error deleting the item. Please try again.",
-                        1
+                        1 // Error type
                     );
                     console.error("Delete failed:", xhr.responseText);
                 },
@@ -100,24 +100,24 @@ class Common {
     }
     
     /**
-     *
      * @param msg = notification message
-     * @param err = 1=Error, 0/null = Success
+     * @param type = 0: Success, 1: Error, 2: Warning (New)
      */
-  /**
-     *
-     * @param msg = notification message
-     * @param err = 1=Error, 0/null = Success
-     */
-    showToast(msg, err = 0) {
+    showToast(msg, type = 0) {
         const $toast = $(".toast");
         const $header = $toast.find(".toast-header");
-        const isError = err > 0;
-        
-        // Apply color classes to the header only (bg-success or bg-danger)
+
+        // 🚨 MODIFIED LOGIC HERE 🚨
+        let headerClass = "bg-success";
+        if (type === 1) {
+            headerClass = "bg-danger";
+        } else if (type === 2) { 
+            headerClass = "bg-warning";
+        }
+
         $header
-            .removeClass("bg-success bg-danger")
-            .addClass(isError ? "bg-danger" : "bg-success");
+            .removeClass("bg-success bg-danger bg-warning")
+            .addClass(headerClass);
             
         // Set the message text in the toast body
         $toast.find(".toast-body strong").text(msg);
@@ -125,12 +125,10 @@ class Common {
         // Bring to front
         $toast.css("z-index", 10000);
 
-        // CRITICAL FIX: Initialize the toast. We MUST NOT pass a delay option,
-        // as the HTML attribute data-bs-delay is already handling it.
+        // Initialize and show the toast
         var toast = new bootstrap.Toast($toast[0]); 
 
         toast.show();
-        // The manual setTimeout(toast.hide) is now GONE.
     }
 
     showError(formid, index, value) {

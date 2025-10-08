@@ -8,11 +8,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RespondentsController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\AdminController; 
-
 use App\Http\Controllers\ManageController;
 
 // FIX: Change the root route to call the ManageController@index method.
 Route::get('/', [ManageController::class, 'index'])->name('root');
+
+// Route::get('/', function () {
+//  return redirect()->route('login');
+// });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -27,12 +30,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/interpretation', [InterpretationController::class, 'index'])->name('interpretation');
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// =========================================================================
-// CRITICAL FIX: Wrap the manage resource routes in an 'api' prefix group.
-// This registers the routes as /api/manage, /api/manage/{id}, etc., 
-// matching the JavaScript's API_BASE_URL.
 // =========================================================================
 Route::group(['prefix' => 'api'], function () {
     // Only defining the resource routes we need to use via AJAX/API

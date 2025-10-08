@@ -79,7 +79,6 @@
                         {{-- JS will insert chips here --}}
                     </div>
 
-                    {{-- REMOVED: #subTraitsContainer was moved inside #traitForm above. --}}
                 </div>
 
                 <hr>
@@ -173,8 +172,8 @@
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-start modal-md">
             <div class="modal-content border-0 shadow">
-                <div class="modal-header trait-modal-header text-white">
-                    <h5 class="modal-title fw-medium" id="saveConfirmationModalLabel">Confirm Update</h5>
+                <div class="modal-header text-white">
+                    <h5 class="modal-title text-white fw-md" id="saveConfirmationModalLabel">Confirm Update</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -188,10 +187,9 @@
                     </p>
                 </div>
                 <div class="modal-footer border-0 pt-2">
-                    <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Review</button>
-                    <button type="button" class="btn btn-primary px-4 btn-save" id="confirmSaveBtn"
-                        onclick="confirmSave()">
-                        <i class="bi bi-check-lg me-1"></i> Yes, Update Trait
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Review</button>
+                    <button type="button" class="btn save-btn" id="confirmSaveBtn"
+                        onclick="confirmSave()"></i> Update Trait
                     </button>
                 </div>
             </div>

@@ -16,9 +16,18 @@ class TraitModel extends Model
         'title',
         'description',
         'trait_display_color',
-        // CRITICAL: Ensure 'max_raw_score' is included for mass assignment
         'max_raw_score', 
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($trait) {
+            $trait->subTraits->each(function ($subTrait) {
+                 $subTrait->delete();
+            });
+        });
+    }
 
     public function subTraits(): HasMany
     {
