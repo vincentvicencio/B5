@@ -86,55 +86,44 @@
                     {{ session('error') }}
                 </div>
             @endif
-
-            {{-- REMOVED 'ms-4' (margin-start: 4) class which was pushing the table card to the right --}}
-            <div class="table-card table-card-fixed-height py-4">
-                <div class="table-container table-responsive-sm table-responsive-md table-responsive-lg">
-                    <table class="table modern-table" id="registeredidTable">
+            <!-- Respondents Table Container -->
+            <div class="py-4">
+                <div class="table-responsive bg-white rounded-3 shadow-sm border p-4">
+                    <table class="table table-hover align-middle mb-0" id="respondents-table">
                         <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Interpretation</th>
-                                <th>Recommendation</th>
+                            <tr class="text-uppercase text-secondary" id="respondents-table-header">
+                                {{-- These are the fixed columns. Dynamic trait columns will be injected by JavaScript. --}}
+                                <th scope="col">#</th>
+                                <th scope="col">Respondent</th>
+                                {{-- Dynamic Trait Headers will be inserted here by respondents.js based on API response
+                                --}}
+                                <th scope="col">Overall Score</th>
+                                <th scope="col">Interpretation</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr data-interpretation="High" data-recommendation="Sales">
-                                <td>John Doe</td>
-                                <td>john.doe@example.com</td>
-                                <td>High</td>
-                                <td>Sales</td>
-                            </tr>
-                            <tr data-interpretation="Moderate" data-recommendation="Back Office">
-                                <td>Jane Smith</td>
-                                <td>jane.smith@example.com</td>
-                                <td>Moderate</td>
-                                <td>Back Office</td>
-                            </tr>
-                            <tr data-interpretation="Low" data-recommendation="Customer Service">
-                                <td>Peter Jones</td>
-                                <td>peter.jones@example.com</td>
-                                <td>Low</td>
-                                <td>Customer Service</td>
-                            </tr>
-                            <tr data-interpretation="High" data-recommendation="Specialized Accountant">
-                                <td>Sarah Lee</td>
-                                <td>sarah.lee@example.com </td>
-                                <td>High</td>
-                                <td>Specialized Accountant</td>
-                            </tr>
-                            <tr data-interpretation="Moderate" data-recommendation="Sales">
-                                <td>Michael Chen</td>
-                                <td>michael.chen@example.com</td>
-                                <td>Moderate</td>
-                                <td>Sales</td>
+                        <tbody id="respondents-table-body">
+                            <!-- Data will be loaded via AJAX/JavaScript here -->
+                            <tr>
+                                {{-- colspan will be updated by JS once trait count is known --}}
+                                <td colspan="10" class="text-center py-5 text-muted">Loading respondents data...</td>
                             </tr>
                         </tbody>
                     </table>
+
+                    <!-- Placeholder for pagination/footer info -->
+                    <div id="table-footer" class="d-flex justify-content-between align-items-center pt-3">
+                        <span id="record-info" class="text-muted small"></span>
+                        <nav aria-label="Table Pagination" id="pagination-controls">
+                            <!-- Pagination will be inserted here -->
+                        </nav>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
-
+    @include('components.confirmation')
+    @include('components.toast')
+    @vite(['resources/js/search.js', 'resources/js/respondents.js'])
 @endsection

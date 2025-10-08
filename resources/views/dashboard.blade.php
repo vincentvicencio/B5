@@ -142,4 +142,6 @@
             </div>
         </div>
     </div>
+
+@vite(['resources/js/dashboard.js'])
 @endsection

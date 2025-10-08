@@ -3,8 +3,8 @@
     aria-hidden="true">
      <div class="modal-dialog modal-dialog-start modal-md">
         <div class="modal-content border-0 shadow">
-            <div class="modal-header trait-modal-header text-white">
-                <h5 class="modal-title text-white" id="delete-title">Confirm Deletion</h5>
+            <div class="modal-header text-white">
+                <h5 class="modal-title text-white fw-md" id="delete-title">Confirm Deletion</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
                 </div>
@@ -16,8 +16,7 @@
                     <input type="hidden" name="delete_record_id" id="delete_record_id"
                         class="notification_record">
                     </div>
-                <div class="modal-footer border-0">
-                    {{-- CRITICAL FIX: Ensure the Cancel button has data-bs-dismiss="modal" --}}
+                <div class="modal-footer border-0 mt-3">
                     <button type="button" class="btn btn-secondary px-4"
                         data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-danger px-4" id="btn_delete_ok">Yes,
@@ -33,8 +32,8 @@
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-start modal-md">
         <div class="modal-content border-0 shadow">
-            <div class="modal-header trait-modal-header text-white">
-                <h5 class="modal-title fw-bold" id="editQuestionModalLabel">Edit Assessment Question</h5>
+            <div class="modal-header text-white">
+                <h5 class="modal-title text-white fw-md" id="editQuestionModalLabel">Edit Assessment Question</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -52,10 +51,9 @@
                 </div>
             </div>
             <div class="modal-footer border-0 pt-2">
-                <button type="button" class="btn btn-outline-secondary p-2" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary btn-save p-2" id="confirmEditQuestionBtn"
-                    onclick="confirmEditQuestion()">
-                    <i class="bi bi-check-lg me-1"></i> Save Changes
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn save-btn" id="confirmEditQuestionBtn"
+                    onclick="confirmEditQuestion()"> Save Changes
                 </button>
             </div>
         </div>
@@ -68,7 +66,7 @@
     <div class="modal-dialog modal-dialog-start modal-md">
         <div class="modal-content border-0 shadow">
             <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title fw-bold text-white" id="deleteQuestionConfirmationModalLabel">Confirm Deletion</h5>
+                <h5 class="modal-title text-white fw-md" id="deleteQuestionConfirmationModalLabel">Confirm Deletion</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -90,24 +88,21 @@
 
 <div class="modal fade" id="editSubTraitModal" tabindex="-1" aria-labelledby="editSubTraitModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-start modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-white" id="editSubTraitModalLabel">Edit Sub-section Name</h5>
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header text-white">
+                <h5 class="modal-title text-white fw-md" id="editSubTraitModalLabel">Edit Sub-section Name</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                {{-- Placeholder where old name is displayed --}}
                 <p>Editing: <strong id="oldSubTraitNamePlaceholder"></strong></p>
                 <div class="mb-3">
                     <label for="newSubTraitNameInput" class="form-label">New Name</label>
-                    {{-- CRITICAL ID: Matches DOM.newSubTraitNameInput in JS --}}
                     <input type="text" class="form-control" id="newSubTraitNameInput" required>
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer border-0 pt-2">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                {{-- CRITICAL ID: Matches DOM.confirmEditSubTraitBtn in JS --}}
-                <button type="button" class="btn btn-primary" id="confirmEditSubTraitBtn" onclick="saveEditedSubTrait()">
+                <button type="button" class="btn save-btn" id="confirmEditSubTraitBtn" onclick="saveEditedSubTrait()">
                     Save Changes
                 </button>
             </div>

@@ -37,21 +37,8 @@ class Admin extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // --- Database Variable Information ---
-    // You will need to ensure your database connection is configured in the .env file.
-    // The columns in your 'admins' table should match the 'fillable' array above.
-    // A migration file would look something like this:
-    /*
-        Schema::create('admins', function (Blueprint $table) {
-            $table->id();
-            $table->string('username')->unique();
-            $table->string('employee_code')->unique();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->string('updated_by')->nullable();
-            $table->timestamps(); // creates 'created_at' and 'updated_at' columns
-        });
-    */
+    public function findForPassport($username)
+    {
+        return $this->where('username', $username)->first();
+    }
 }

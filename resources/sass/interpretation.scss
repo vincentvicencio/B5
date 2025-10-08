@@ -15,82 +15,116 @@
     h2 {
         color: $header-text-color;
         font-weight: 600;
-        font-size: 1.5rem; // Text-2xl equivalent
+        font-size: 1.5rem;
     }
 
     // Card styling
     .card {
         border-radius: 0.5rem;
-        border: 1px solid $stroke; // Add border to match prototype's division
+        border: 1px solid $stroke;
+    }
+
+    // Interpretation card container
+    .interpretation-card {
+        border: 1px solid $stroke;
+        border-left: 4px solid $header-text-color;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        background: white;
+        transition: all 0.3s ease;
+
+        &:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15) !important;
+            transform: translateY(-2px);
+        }
+
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
 
     // The index circle (1, 2, 3...)
-    .score-index-circle {
-        width: 30px;
-        height: 30px;
-        font-weight: 700;
-        background-color: #e9ecef; // Light gray background
-        color: #495057; // Darker text
+    .interpretation-number {
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
+        background: $header-text-color;
+        color: white;
         display: flex;
         align-items: center;
         justify-content: center;
+        font-weight: 600;
+        font-size: 1rem;
         flex-shrink: 0;
-        margin-top: 5px; // Align better with content
     }
 
-    // Style for the labels (e.g., Score Range, Trait Level)
-    .form-label {
-        color: $header-text-color; // Use a darker color for the label text
-        font-size: 0.95rem;
-        font-weight: 600; // Making it bolder to match the prototype
-    }
+    // Content area
+    .interpretation-content {
+        flex: 1;
+        
+        .trait-level-label,
+        .interpretation-label {
+            display: block;
+            color: $header-text-color;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+            margin-top: 0.75rem;
 
-    // Style for the read-only inputs to make them look like static boxes
-    .form-control[readonly] {
-        background-color: #f8f9fa; /* Light background for the static field */
-        border: 1px solid $stroke;
-        cursor: default; /* Change cursor to indicate it's not editable */
-    }
+            &:first-child {
+                margin-top: 0;
+            }
+        }
 
-    textarea.form-control[readonly] {
-        resize: none;
+        .trait-level-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: $header-text-color;
+            margin-bottom: 0.5rem;
+        }
+
+        .interpretation-text {
+            font-size: 0.9rem;
+            color: #495057;
+            line-height: 1.6;
+            background: #f8f9fa;
+            padding: 0.75rem;
+            border-radius: 4px;
+            border: 1px solid $stroke;
+        }
     }
 
     // Edit/Delete buttons (actions)
     .card-actions {
+        flex-shrink: 0;
+        
         .btn-link {
-            color: $subtitle-text-color; // Gray for icons
-            padding: 0;
+            color: #6c757d;
+            padding: 0.25rem;
             opacity: 0.8;
+            transition: all 0.2s;
+            text-decoration: none;
+            border: none;
+            background: none;
+
             &:hover {
                 opacity: 1;
-                color: $primary; // Primary color on hover
+            }
+
+            &.btn-edit:hover {
+                color: $header-text-color;
+            }
+
+            &.btn-delete:hover {
+                color: #dc3545;
             }
         }
     }
 
-    .py-6 {
-        padding-top: 1.5rem !important;
-        padding-bottom: 1.5rem !important;
-    }
-
-    .btn-edit {
-        color: $header-text-color !important;
-        &:hover {
-            color: darken($header-text-color, 10%) !important;
-        }
-    }
-
-    // Override the link color for Delete (Red)
-    .btn-delete {
-        color: $danger !important;
-        &:hover {
-            color: darken($danger, 10%) !important;
-        }
-    }
-
-    .add-btn {
+    // Custom button styles
+    .btn-outline-primary {
         border: 1px solid $header-text-color;
         font-weight: 500;
         color: $header-text-color;
@@ -101,18 +135,79 @@
         }
     }
 
-    .save-btn {
+    .btn-primary {
         background: $header-text-color;
         color: white;
+        border: none;
 
         &:hover {
             background: $hover;
         }
     }
 
+    .btn-outline-secondary {
+        &:hover {
+            background: #6c757d;
+            color: white;
+        }
+    }
+
+    // Modal styling
     .modal-header {
         background: $header-text-color;
         color: white;
+        border-bottom: none;
+
+        .modal-title {
+            font-weight: 600;
+        }
+
+        .btn-close {
+            filter: brightness(0) invert(1);
+        }
     }
 
+    .modal-body {
+        .form-label {
+            color: $header-text-color;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+
+            .text-danger {
+                color: #dc3545 !important;
+            }
+        }
+
+        .form-control,
+        textarea.form-control {
+            border: 1px solid $stroke;
+            border-radius: 4px;
+
+            &:focus {
+                border-color: $header-text-color;
+                box-shadow: 0 0 0 0.2rem rgba(7, 47, 109, 0.25);
+            }
+        }
+
+        .invalid-feedback {
+            display: none;
+            font-size: 0.875rem;
+        }
+    }
+
+    .modal-footer {
+        border-top: 1px solid $stroke;
+    }
+
+    // Empty state
+    .text-center.py-5 {
+        .spinner-border {
+            color: $header-text-color;
+        }
+
+        .text-muted {
+            color: #6c757d !important;
+        }
+    }
 }

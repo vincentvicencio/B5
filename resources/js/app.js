@@ -6,11 +6,11 @@ import './bootstrap';
 import Chart from 'chart.js/auto';
 window.Chart = Chart;
 
-
 import './dashboard';
 import './search';
 import './login';
 import './navbar';
 import './sidebar'; 
 import './common';
+
 
