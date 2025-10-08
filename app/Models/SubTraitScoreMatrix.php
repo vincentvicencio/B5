@@ -19,10 +19,11 @@ class SubTraitScoreMatrix extends Model
 
     /**
      * A score matrix entry belongs to a specific SubTrait.
+     * CRITICAL FIX: Use 'id' instead of 'subtrait_id' as the ownerKey
      */
     public function subTrait(): BelongsTo
     {
-        return $this->belongsTo(SubTrait::class);
+        return $this->belongsTo(SubTrait::class, 'subtrait_id', 'id');
     }
 
     /**
