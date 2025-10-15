@@ -9,10 +9,8 @@ class Respondent extends Model
 {
     use HasFactory;
 
-    // Define the custom primary key
     protected $primaryKey = 'respondent_id';
 
-    // Specify the attributes that are mass assignable
     protected $fillable = [
         'first_name',
         'last_name',
@@ -20,4 +18,10 @@ class Respondent extends Model
         'email',
         'phone_number',
     ];
+
+    // 🔗 Relationship to assessments table
+   public function assessments()
+{
+    return $this->hasMany(\App\Models\Assessment::class, 'respondent_id', 'respondent_id');
+}
 }

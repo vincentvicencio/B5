@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magellan Solutions - Trait Assessment</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @vite('resources/sass/app.scss')
 </head>
 <body class="min-vh-100 d-flex flex-column">
 
@@ -36,7 +36,7 @@
                         Evaluate candidates' personality traits with our scientifically-designed assessment. Get actionable insights for better hiring decisions.
                     </p>
 
-                    <a href="{{ route('assessment.overview') }}" class="btn btn-lg border-0 text-white assessment-button d-inline-flex align-items-center px-5 py-3 rounded-3">
+                    <a href="{{ route('overview') }}" class="btn btn-lg border-0 text-white assessment-button d-inline-flex align-items-center px-5 py-3 rounded-3">
                     Start Your Assessment
                     <i class=" btn-bi bi bi-arrow-right ms-3"></i>
                     </a>

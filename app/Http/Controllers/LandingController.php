@@ -48,15 +48,16 @@ class LandingController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
-            'phone_number' => 'required|string|max:20',
+            'phone_number' => 'required|string|max:11',
         ]);
 
         $respondent = Respondent::create($validated);
 
         // Store respondent ID in session for the assessment
-        session(['respondent_id' => $respondent->id]);
+        session(['respondent_id' => $respondent->respondent_id]);
 
-        // Redirect to the actual assessment page (you'll create this next)
-        return redirect()->route('assessment.start');
+        // Redirect to the assessment page
+        return redirect()->route('assessment.index')
+            ->with('success', 'Personal information saved successfully!');
     }
 }

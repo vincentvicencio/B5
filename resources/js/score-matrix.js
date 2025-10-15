@@ -124,11 +124,11 @@ function renderLikertScales() {
                     <label class="form-label small fw-semibold mb-1">Rating Label</label>
                     <div class="likert-label-box">${escapeHtml(scale.label)}</div>
                 </div>
-                <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-secondary" onclick="editLikertScale(${scale.id})" title="Edit">
-                        <i class="bi bi-pencil"></i>
+                <div class="btn-group btn-group-md">
+                    <button class="btn btn-outline-secondary border-0 fs-5 text-header-color mt-4" onclick="editLikertScale(${scale.id})" title="Edit">
+                        <i class="bi bi-pencil-square"></i>
                     </button>
-                    <button class="btn btn-outline-danger" onclick="deleteLikertScale(${scale.id})" title="Delete">
+                    <button class="btn btn-outline-danger border-0 fs-5 mt-4" onclick="deleteLikertScale(${scale.id})" title="Delete">
                         <i class="bi bi-trash"></i>
                     </button>
                 </div>
@@ -407,11 +407,11 @@ function renderSubTraitMatrices() {
                 <td>${interpretationLevel}</td>
                 <td class="text-muted small">${updatedDate}</td>
                 <td class="text-center">
-                    <div class="btn-group btn-group-sm">
-                        <button class="btn btn-outline-secondary" onclick="editSubTraitMatrix(${matrix.id})" title="Edit">
-                            <i class="bi bi-pencil"></i>
+                    <div class="btn-group btn-group-md">
+                        <button class="btn btn-outline-secondary border-0 fs-5 text-header-color" onclick="editSubTraitMatrix(${matrix.id})" title="Edit">
+                            <i class="bi bi-pencil-square"></i>
                         </button>
-                        <button class="btn btn-outline-danger" onclick="deleteSubTraitMatrix(${matrix.id})" title="Delete">
+                        <button class="btn btn-outline-danger border-0 fs-5" onclick="deleteSubTraitMatrix(${matrix.id})" title="Delete">
                             <i class="bi bi-trash"></i>
                         </button>
                     </div>
@@ -569,58 +569,29 @@ function renderTraitMatrices() {
                     </div>
             `;
 
-            group.matrices.forEach((matrix, index) => {
-                const interpretationLevel = matrix.interpretation ? escapeHtml(matrix.interpretation.trait_level) : 'N/A';
-                
-                // New structured row based on the prototype image
-                html += `
-                   <div class="trait-score-row" data-matrix-id="${matrix.id}">
-                        <div class="card-body p-3">
-                            <div class="d-flex align-items-center">
-                                <!-- Index Number -->
-                                <div class="traitscore-number me-4 flex-shrink-0">
-                                    ${index + 1}
-                                </div>
+        group.matrices.forEach(matrix => {
+            const interpretationLevel = matrix.interpretation ? escapeHtml(matrix.interpretation.trait_level) : 'N/A';
             
-                                <!-- Score Range and Interpretation content -->
-                                <div class="traitscore-content flex-grow-1">
-                                    <div class="row g-3">
-                                        <!-- Score Range Column (Made col-6 for small screens and allowed it to grow) -->
-                                        <div class="col-12 col-md-4">
-                                            <span class="trait-score-label mb-3">Score Range</span>
-                                            <div class="fw-bold">
-                                                <span class="trait-score-value">${matrix.min_score} - ${matrix.max_score}</span>
-                                            </div> 
-                                        </div>
-
-                                        <!-- Interpretation Level Column (Made col-8 for small screens and allowed it to grow) -->
-                                        <div class="col-12 col-md-8">
-                                            <span class="trait-score-label mb-3">Interpretation</span>
-                                            <div class="fw-bold">
-                                                <span class="trait-score-value">${interpretationLevel}</span>
-                                            </div> 
-                                        </div>
-                                    </div>
-                                </div>
-            
-                                <!-- Card Actions -->
-                                <div class="card-actions d-flex ms-3 flex-shrink-0">
-                                    <button class="btn btn-link btn-edit p-2" 
-                                            onclick="editTraitMatrix(${matrix.id})" 
-                                            title="Edit">
-                                        <i class="bi bi-pencil-square fs-5 text-secondary"></i>
-                                    </button>
-                                    <button class="btn btn-link btn-delete p-2" 
-                                            onclick="deleteTraitMatrix(${matrix.id})" 
-                                            title="Delete">
-                                        <i class="bi bi-trash fs-5 text-danger"></i>
-                                    </button>
-                                </div>
-                            </div>
+            html += `
+                <div class="trait-score-row">
+                    <div>
+                        <span class="fw-bold me-2">Total Range:</span>
+                        <span class="badge bg-secondary">${matrix.min_score} - ${matrix.max_score}</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="badge bg-primary me-2">${interpretationLevel}</span>
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-secondary border-0 fs-5 text-header-color" onclick="editTraitMatrix(${matrix.id})" title="Edit">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                            <button class="btn btn-outline-danger border-0 fs-5" onclick="deleteTraitMatrix(${matrix.id})" title="Delete">
+                                <i class="bi bi-trash"></i>
+                            </button>
                         </div>
                     </div>
-                `;
-            });
+                </div>
+            `;
+        });
 
             html += `</div>`;
     });

@@ -26,11 +26,13 @@
 @import 'sidebar';
 
 @import 'landing';
+@import 'overview';
+@import 'assessment';
 
-@import 'edit';
-
-@import 'index';
+@import 'admin';
 @import 'interpretation';
 
 @import 'score-matrix';
 @import 'manage';
+@import 'personal-info';
+@import 'assessment';

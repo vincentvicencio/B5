@@ -1,0 +1,380 @@
+#assessment-form, #assessment-complete {
+    max-width: 900px;
+    margin: 0 auto;
+    margin-top: 30px;
+    padding: 0 2rem 3rem;
+    // background-color: #ffffff;
+    // box-shadow: 0 4px 15px rgba(0, 119, 255, 0.068) !important;
+    border-radius: 1rem;
+
+    .container-logo {
+        background: linear-gradient(
+            90deg,
+            $header-text-color 0%,
+            rgba(27, 85, 151, 1) 100%
+        );
+        padding: 2.5rem;
+        border-radius: 0.5rem;
+    }
+
+    .container-logo img {
+        max-height: 200px;
+    }
+
+    .banner-logo {
+        max-width: 350px;
+        height: auto;
+    }
+
+    /* Trait Header - White background with border */
+    .trait-header {
+        background-color: #ffffff;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+        border-left: 8px solid transparent;
+        background-size: 8px 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .trait-header h2 {
+        color: #1a1a1a;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 0 0 0.25rem 0;
+    }
+
+    .trait-header p {
+        color: #6c757d;
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
+    /* Subtrait Header - Colored background */
+    .subtrait-header {
+        padding: 1rem 1.5rem;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .subtrait-header h3 {
+        color: #ffffff;
+        font-size: 1.1rem;
+        text-shadow: #0000003a 1px 1px 2px;
+        margin: 0;
+    }
+
+    /* Question Card - White background */
+    .question-card {
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+        border-left: 4px solid;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .question-text {
+        color: #1a1a1a;
+        font-size: 0.95rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        line-height: 1.5;
+    }
+
+    .question-instruction {
+        color: #6c757d;
+        font-size: 0.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .likert-scale {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .likert-option {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .likert-label {
+        font-size: 0.75rem;
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        display: block;
+        line-height: 1.3;
+        min-height: 2.5rem;
+    }
+
+    .likert-option input[type="radio"] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: 22px;
+        height: 22px;
+        border: 2px solid #d1d5db;
+        border-radius: 50%;
+        outline: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin: 0;
+    }
+
+    .likert-option input[type="radio"]:hover {
+        border-color: #9ca3af;
+        transform: scale(1.1);
+    }
+
+    .likert-option input[type="radio"]:checked {
+        border-width: 7px;
+    }
+
+    .subtrait-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 2.5rem;
+        padding-top: 1.5rem;
+    }
+
+    .btn-back {
+        flex: 0 0 auto;
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+        color: #495057;
+        padding: 0.875rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        text-align: center;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .btn-continue {
+        flex: 0 0 auto;
+        background-color: $header-text-color;
+        border: 2px solid $header-text-color;
+        color: #ffffff;
+        padding: 0.875rem 1.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        font-size: 1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .btn-continue:hover {
+        background-color: $header-text-color;
+        color: #ffffff;
+    }
+
+    .progress-text {
+        text-align: center;
+        margin-top: 1rem;
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+
+    @media (max-width: 768px) {
+        .container-logo img {
+            max-height: 90px;
+        }
+
+        .likert-scale {
+            gap: 0.5rem;
+        }
+
+        .likert-label {
+            font-size: 0.65rem;
+            min-height: 2rem;
+        }
+
+        .likert-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        .button-group {
+            flex-direction: column;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .form-container {
+            padding: 0 1rem 2rem;
+        }
+
+        .likert-scale {
+            gap: 0.25rem;
+        }
+
+        .likert-label {
+            font-size: 0.6rem;
+        }
+    }
+
+    //Assessment-Complete blade
+
+    .completion-container {
+        min-height: calc(100vh - 100px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f7f7f7;
+        padding: 2rem;
+    }
+
+    .completion-wrapper {
+        max-width: 900px;
+        width: 100%;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background-color: #07306d3a;
+        border-radius: 2rem;
+        padding: 0.5rem 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .status-badge i,
+    .status-badge span {
+        color: $header-text-color;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .status-badge i {
+        font-size: 1.25rem;
+    }
+
+    .success-card {
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        border: 2px solid #28a745;
+        border-radius: 1rem;
+        padding: 3rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.15);
+    }
+
+    .success-icon {
+        width: 120px;
+        height: 120px;
+        background-color: #28a745;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        box-shadow: 0 4px 20px rgba(40, 167, 69, 0.3);
+    }
+
+    .success-icon i {
+        font-size: 4rem;
+        color: #ffffff;
+    }
+
+    .success-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #155724;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+    }
+
+    .success-message {
+        font-size: 1.1rem;
+        color: #155724;
+        line-height: 1.6;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* Home Button */
+    .btn-home-container {
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-home {
+        background-color: #072f6d;
+        border: 2px solid #072f6d;
+        color: #ffffff;
+        padding: 0.5rem 2rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(7, 47, 109, 0.2);
+    }
+
+    .btn-home:hover {
+        background-color: #05234d;
+        border-color: #05234d;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(7, 47, 109, 0.3);
+        color: #ffffff;
+    }
+
+    @media (max-width: 768px) {
+        .completion-container {
+            padding: 1rem;
+        }
+
+        .success-card {
+            padding: 2rem 1.5rem;
+        }
+
+        .success-title {
+            font-size: 1.5rem;
+        }
+
+        .success-message {
+            font-size: 1rem;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+        }
+
+        .success-icon i {
+            font-size: 3rem;
+        }
+
+        .btn-home {
+            padding: 0.875rem 2rem;
+            font-size: 0.95rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .btn-home {
+            width: 100%;
+        }
+    }
+}

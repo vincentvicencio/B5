@@ -14,28 +14,31 @@
                 </button>
             </div>
 
-            <div class="search p-2 p-md-3 d-flex justify-content-center border-bottom">
-                <div class="col-12 col-md-6 col-lg-4 w-100">
-                    <div class="position-relative">
-                        <input type="text" 
-                            class="form-control form-control-sm" 
-                            placeholder="Search username, emp code..." 
-                            value="{{ request('search') }}"
-                            id="adminSearchInput"
-                            autocomplete="off">
-                        <i class="bi bi-search text-muted position-absolute"></i>
-                        <button type="button" 
-                                class="btn btn-sm position-absolute {{ request('search') ? '' : 'd-none' }}" 
-                                id="clearSearch">
-                            <i class="bi bi-x-circle-fill text-secondary"></i>
-                        </button>
-                    </div>
-                </div>
+            <div class="search-container position-relative">
+    <div class="search p-2 p-md-3 d-flex justify-content-center">
+        <div class="col-12 col-md-6 col-lg-4 w-100">
+            <div class="position-relative">
+                <input type="text" 
+                    class="form-control form-control-sm" 
+                    placeholder="Search username, emp code..." 
+                    value="{{ request('search') }}"
+                    id="adminSearchInput"
+                    autocomplete="off">
+                <i class="bi bi-search text-muted position-absolute"></i>
+                <button type="button" 
+                        class="btn btn-sm position-absolute {{ request('search') ? '' : 'd-none' }}" 
+                        id="clearSearch">
+                    <i class="bi bi-x-circle-fill text-secondary"></i>
+                </button>
             </div>
+        </div>
+    </div>
+</div>
+
 
             <div class="card shadow-sm">
                 <div class="card-body p-0 m-2">
-                    <div class="table-container">
+                    <div class="table-container ">
                         <table class="table table-hover align-middle mb-0 table-sm">
                             <thead>
                                 <tr>
@@ -68,7 +71,7 @@
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end">
                                                 <li>
-                                                    <a class="dropdown-item edit-btn" href="#" data-id="{{ $admin->id }}">
+                                                    <a class="dropdown-item edit-btnn" href="#" data-id="{{ $admin->id }}">
                                                         <i class="bi bi-pencil me-2"></i>Edit
                                                     </a>
                                                 </li>
@@ -116,4 +119,6 @@
 
     @include('admin.create')
     @include('admin.edit')
+    @include('components.confirmation')
+    @include('components.toast')
 @endsection
