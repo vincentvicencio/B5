@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ManageController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\RespondentsController;
 use App\Http\Controllers\ScoreMatrixController;
 use App\Http\Controllers\InterpretationController;

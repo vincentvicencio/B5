@@ -34,10 +34,13 @@
         }
     }
 }
+.edit-btns {
+    &:hover {
+        color: white !important;
+    }
+}
 
-// --- Common Card, Container, & Section Styles ---
 
-// Base for containers with primary background and stroke
 .trait-card,
 .trait-sub-card, // Added for background/stroke consistency
 .question-form-area { // Added for background/stroke consistency
@@ -220,6 +223,11 @@
         color: $white;
         text-decoration: none;
     }
+    .btn-outline-secondary {
+        &:hover {
+            color: white !important;
+        }
+    } 
 }
 
 
@@ -327,16 +335,6 @@
             font-size: 14px;
         }
     }
-}
-
-// --- Text Utilities ---
-.text-muted {
-    color: $subtitle-text-color !important;
-    font-size: 14px;
-}
-
-.text-light {
-    color: rgba($subtitle-text-color, 0.5) !important;
 }
 
     .modal-header {
