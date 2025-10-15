@@ -25,7 +25,7 @@
           <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-1">
         </div>
         
-        <div class="login-box w-75">
+        <div class="login-box w-100">
           <h2 class="login-title text-center">Login</h2>
           <p class="login-subtitle text-center">Enter your credentials to access your account</p>
 

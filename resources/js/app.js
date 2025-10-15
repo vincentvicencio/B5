@@ -12,5 +12,5 @@ import './login';
 import './navbar';
 import './sidebar'; 
 import './common';
-
+import './assessment-trait';
 

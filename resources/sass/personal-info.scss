@@ -13,6 +13,10 @@
             $header-text-color 0%,
             rgba(27, 85, 151, 1) 100%
         );
+    @import 'variables';
+    
+        .container-logo {
+        background: linear-gradient(90deg, $header-text-color 0%, rgba(27, 85, 151, 1) 100%);
         padding: 2.5rem;
         border-radius: 0.5rem;
     }
