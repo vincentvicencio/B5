@@ -141,6 +141,11 @@ class AssessmentController extends Controller
     /**
      * Complete the assessment and save to database
      */
+    // ... (rest of the controller code remains the same)
+
+    /**
+     * Complete the assessment and save to database
+     */
     private function completeAssessment()
     {
         $respondentId = Session::get('respondent_id');
@@ -153,8 +158,10 @@ class AssessmentController extends Controller
         ]);
 
         if (!$respondentId || empty($responses)) {
+            // Clear any lingering session data and redirect to start
+            Session::forget(['respondent_id', 'assessment_responses', 'current_trait_index']);
             return redirect()->route('personal-info')
-                ->with('error', 'Session expired. Please start again.');
+                ->with('error', 'Session expired or responses missing. Please start again.');
         }
 
         DB::beginTransaction();
@@ -212,7 +219,10 @@ class AssessmentController extends Controller
 
             \Log::info('=== ASSESSMENT COMPLETED SUCCESSFULLY ===');
 
-            // Clear session data
+            // ✅ FIX 1: Store assessment ID in session for the completion blade
+            Session::flash('assessment_id', $assessment->id);
+
+            // Clear other session data
             Session::forget(['respondent_id', 'assessment_responses', 'current_trait_index']);
 
             // Redirect to completion page
@@ -227,9 +237,14 @@ class AssessmentController extends Controller
                 'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString()
             ]);
-            return back()->with('error', 'An error occurred. Please try again.');
+            
+            // ✅ FIX 2: Change return back() to safe redirect on error
+            return redirect()->route('assessment.complete')
+                ->with('error', 'An error occurred during final submission. Please contact support if this persists.');
         }
     }
+
+// ... (rest of the controller code remains the same)
 
     /**
      * Show completion page

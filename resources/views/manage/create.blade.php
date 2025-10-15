@@ -4,15 +4,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     {{-- Back Button Header --}}
-    <div id="back-icon" class="mb-4 mx-4">
-        <a href="{{ route('manage.index') }}" class="text-decoration-none d-flex align-items-center">
-            <i class="bi bi-arrow-left me-2 fs-4 mb-2"></i>
-            <div>
-                <h1 class="mt-3 fs-2 fw-bold back-title">Add New Trait</h1>
-                <p class="mb-0 text-muted small">Create a new assessment section with questions</p>
-            </div>
-        </a>
-    </div>
+   <div id="back-icon" class="mb-4 mx-4">
+    <a href="{{ route('manage.index') }}" class="text-decoration-none d-inline-flex align-items-center">
+        <i class="bi bi-arrow-left me-2 fs-4 mb-2"></i>
+        <div>
+            <h1 class="mt-3 fs-2 fw-bold back-title">Add New Trait</h1>
+            <p class="mb-0 text-muted small">Create a new assessment section with questions</p>
+        </div>
+    </a>
+</div>
 
     {{-- Main Form Content --}}
     <div id="manage-create" class="container-fluid px-4">

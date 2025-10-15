@@ -3,7 +3,7 @@
 @section('content')
 
 <main>
-    <div class="form-container py-4">
+    <div class="form-container" id="personal-info-form">
         <div class="container-logo justify-content-center text-center mb-4">
             <img src="{{ asset('images/logo.png') }}" alt="Magellan Solutions" class="banner-logo">
         </div>
