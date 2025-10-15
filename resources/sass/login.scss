@@ -38,7 +38,7 @@
     }
 
     .login-page .login-box {
-      max-width: 400px;
+      max-width: 100%;
       width: 100%;
       background-color: #fff;
       padding: 0 15px; 
@@ -62,6 +62,7 @@
       border: 1px solid #686868;
       border-radius: 8px;
       padding: 0.75rem;
+      width: 100%;
     }
     .login-page .login-box .form-control:focus {
       border-color: $header-text-color;
@@ -83,7 +84,7 @@
     .password-container .form-control { padding-right: 3.5rem !important; }
     .input-icon { 
       position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
-      pointer-events: none; color: #6c757d; font-size: 1.25rem; 
+      pointer-events: none; color: #6c757d; font-size: 1.25rem;
     }
 
     .left-icon { left: 0.75rem; font-size: 1rem; }
@@ -91,7 +92,9 @@
       right: 0.75rem; cursor: pointer; pointer-events: all; color: #6c757d; font-size: 1rem; 
     }
     .input-group-text { display: none; }
-
+    .input-container-with-icon{
+      width: 165%;
+    }
 
     /* ================================================= */
     /*  MOBILE RESPONSIVENESS (Screen width < 768px)  */

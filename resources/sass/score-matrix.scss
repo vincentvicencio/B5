@@ -109,7 +109,7 @@
         background: #fff;
 
         .trait-title {
-            font-size: 16px;
+            font-size: 20px;
             font-weight: 600;
             color: $header-text-color;
             margin-bottom: 0.5rem;
@@ -122,13 +122,52 @@
             padding: 0.75rem;
             border: 1px solid $stroke;
             border-radius: 6px;
-            margin-bottom: 0.5rem;
-            background: #fafbfc;
+            margin-bottom: 1rem;
 
             &:last-child {
                 margin-bottom: 0;
             }
         }
+    }
+
+    .traitscore-number {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #f7f9fb;
+        color: $header-text-color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    .trait-score-label {
+        display: block;
+        color: $header-text-color;
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.25rem;
+        margin-top: 0.75rem;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+
+    .trait-score-value {
+        font-size: 1rem;
+        color: black;
+        margin-bottom: 0.5rem;
+        background: #f8f9fa;
+        padding: 0.75rem;
+        border-radius: 10px;
+        border: 2px solid $stroke;
+        width: 100% !important;
+        display: block;
     }
 
     // Sub-Trait Pills - Updated to button style
@@ -259,4 +298,4 @@
             }
         }
     }
-} // <-- The final, correct closing brace for #score-matrix-page
+}

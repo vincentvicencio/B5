@@ -246,8 +246,8 @@ function renderAddedQuestions() {
                     <span class="me-auto text-dark me-2">
                         <span class="fw-semibold text-muted me-2">${questionNumber}.</span> ${q.text}
                     </span>
-                    <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary border-0 fs-5" onclick="editQuestion(${originalIndex})" title="Edit Question"><i class="bi bi-pencil-square"></i></button>
+                    <div class="d-flex gap-1">
+                        <button type="button" class="btn btn-sm btn-outline-secondary border-0 fs-5" onclick="editQuestion(${originalIndex})" title="Edit Question"><i class="bi bi-pencil-square text-header-color edit-btns"></i></button>
                         <button type="button" class="btn btn-sm btn-outline-danger border-0 fs-5" onclick="deleteQuestion(${originalIndex})" title="Delete Question"><i class="bi bi-trash"></i></button>
                     </div>
                 `;

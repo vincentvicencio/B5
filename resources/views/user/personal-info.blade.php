@@ -3,7 +3,7 @@
 @section('content')
 
 <main>
-    <div class="form-container py-4">
+    <div class="form-container py-4" id="personal-info">
         <div class="container-logo justify-content-center text-center mb-4">
             <img src="{{ asset('images/logo.png') }}" alt="Magellan Solutions" class="banner-logo">
         </div>
@@ -131,7 +131,7 @@
                 </a>
                 <button type="submit" class="btn btn-continue">
                     Continue to Assessment
-                </button>
+                </button>   
             </div>
         </form>
         @vite (['resources/sass/personal-info.scss'])

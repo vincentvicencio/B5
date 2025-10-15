@@ -2,19 +2,16 @@
 
 @section('content')
 
-<div id="interpretation" class="py-4">
-    <div class="container-fluid px-4">
-
-        <div class="mb-4">
-            <h1>Scoring Interpretation Configuration</h1>
-            <p class="mb-0">Configure scoring interpretations for the personality assessment.</p>
-        </div>
+    <div id="interpretation" class="py-6 sm:py-12">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8"> 
+              <h1>Scoring Interpretation Configuration</h1>
+            <p>Configure scoring interpretations for the personality assessment.</p>
 
         {{-- Sub-Trait Score Interpretation Ranges --}}
         <div class="card shadow-sm border-0 mb-4">
             <div class="card-body p-4">
                 <div class="mb-4">
-                    <h2 class="mb-1">Sub-Trait Score Interpretation Ranges</h2>
+                    <h2 class="mb-1">Sub-Trait Score Interpretation</h2>
                 </div>
 
                 <div id="subTraitInterpretationContainer">
@@ -86,16 +83,17 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-lg me-1"></i> Cancel
+                <button type="button" class="btn btn-outline-secondary py-2" data-bs-dismiss="modal">
+                    Cancel
                 </button>
-                <button type="button" class="btn btn-primary" onclick="saveInterpretation()">
-                    <i class="bi bi-check-lg me-1"></i> Save Interpretation
+                <button type="button" class="btn btn-save fw-medium" onclick="saveInterpretation()">
+                    Save Interpretation
                 </button>
             </div>
         </div>
+
+        </div>
     </div>
-</div>
 
 @include('components.confirmation')
 @include('components.toast')

@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ManageController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\RespondentsController;
 use App\Http\Controllers\ScoreMatrixController;
 use App\Http\Controllers\InterpretationController;
@@ -32,7 +33,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::group(['prefix' => 'assessment'], function () {
         Route::get('/', [AssessmentController::class, 'index'])->name('assessment.index');
         Route::get('/trait/{traitId}', [AssessmentController::class, 'showTrait'])->name('assessment.trait');
-        Route::post('/trait/{traitId}', [AssessmentController::class, 'storeTrait'])->name('assessment.trait.store');
+        Route::post('/user/assessment/{traitId}/store', [AssessmentController::class, 'storeTrait'])->name('assessment.trait.store');
         Route::get('/complete', [AssessmentController::class, 'showComplete'])->name('assessment.complete');
     });
 });
@@ -111,10 +112,16 @@ Route::middleware('auth')->group(function () {
     
 
     Route::group(['prefix' => 'respondents'], function () {
-        Route::get('/', [RespondentsController::class, 'index'])->name('respondents.index');
-        Route::post('/list', [RespondentsController::class, 'list'])->name('respondents.list');
-        Route::get('/show', [RespondentsController::class, 'show'])->name('respondents.show');
-    });
+    Route::get('/', [RespondentsController::class, 'index'])->name('respondents.index');
+    Route::get('/list', [RespondentsController::class, 'list'])->name('respondents.list');
+    Route::get('/show', [RespondentsController::class, 'show'])->name('respondents.show');
+    Route::delete('/{id}', [RespondentsController::class, 'destroy'])->name('respondents.destroy');
+});
+
+// 🧠 AJAX route for live table data
+Route::group(['prefix' => 'api'], function () {
+    Route::get('/respondents', [RespondentsController::class, 'getRespondents']);
+});
     
 
     Route::get('/interpretation', [InterpretationController::class, 'index'])->name('interpretation');

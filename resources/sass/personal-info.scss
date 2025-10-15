@@ -1,4 +1,20 @@
+#personal-info-form {
+    max-width: 900px;
+    margin: 0 auto;
+    margin-top: 30px;
+    padding: 0 2rem 3rem;
+    background-color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 119, 255, 0.068) !important;
+    border-radius: 1rem;
 
+    .container-logo {
+        background: linear-gradient(
+            90deg,
+            $header-text-color 0%,
+            rgba(27, 85, 151, 1) 100%
+        );
+    @import 'variables';
+    
         .container-logo {
         background: linear-gradient(90deg, $header-text-color 0%, rgba(27, 85, 151, 1) 100%);
         padding: 2.5rem;
@@ -12,16 +28,6 @@
     .banner-logo {
         max-width: 350px;
         height: auto;
-    }
-
-    .form-container {
-        max-width: 900px;
-        margin: 0 auto;
-        margin-top: 30px;
-        padding: 0 2rem 3rem;
-        background-color: #ffffff;
-        box-shadow: 0 4px 15px rgba(0, 119, 255, 0.068) !important;
-        border-radius: 1rem;
     }
 
     /* --- Updated info-header with responsive layout --- */
@@ -80,7 +86,6 @@
         margin-left: 0.25rem;
     }
 
-
     .form-group label .optional {
         color: #6c757d;
         font-weight: 400;
@@ -104,7 +109,7 @@
         border-color: #dc3545;
     }
 
-    .form-control:focus  {
+    .form-control:focus {
         background: none;
         box-shadow: none;
         outline: none;
@@ -181,7 +186,7 @@
         .button-group {
             flex-direction: column;
         }
-        
+
         .btn-back,
         .btn-continue {
             width: 100%;
@@ -191,3 +196,4 @@
             max-width: 100%;
         }
     }
+}

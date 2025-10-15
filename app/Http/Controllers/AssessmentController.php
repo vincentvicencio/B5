@@ -13,6 +13,7 @@ use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log; // The facade is imported here
 
 class AssessmentController extends Controller
 {
@@ -141,20 +142,28 @@ class AssessmentController extends Controller
     /**
      * Complete the assessment and save to database
      */
+    // ... (rest of the controller code remains the same)
+
+    /**
+     * Complete the assessment and save to database
+     */
     private function completeAssessment()
     {
         $respondentId = Session::get('respondent_id');
         $responses = Session::get('assessment_responses', []);
 
-        \Log::info('=== STARTING ASSESSMENT COMPLETION ===', [
+        // FIXED: Changed \Log::info to Log::info for consistency
+        Log::info('=== STARTING ASSESSMENT COMPLETION ===', [
             'respondent_id' => $respondentId,
             'total_responses' => count($responses),
             'first_5_responses' => array_slice($responses, 0, 5, true)
         ]);
 
         if (!$respondentId || empty($responses)) {
+            // Clear any lingering session data and redirect to start
+            Session::forget(['respondent_id', 'assessment_responses', 'current_trait_index']);
             return redirect()->route('personal-info')
-                ->with('error', 'Session expired. Please start again.');
+                ->with('error', 'Session expired or responses missing. Please start again.');
         }
 
         DB::beginTransaction();
@@ -165,7 +174,8 @@ class AssessmentController extends Controller
             $subTraitScores = $this->calculateSubTraitScores($responses);
             $overallScore = $this->calculateOverallScore($traitScores);
 
-            \Log::info('=== SCORES CALCULATED ===', [
+            // FIXED: Changed \Log::info to Log::info for consistency
+            Log::info('=== SCORES CALCULATED ===', [
                 'overall_score' => $overallScore,
                 'trait_scores' => $traitScores,
                 'subtrait_count' => count($subTraitScores)
@@ -183,7 +193,8 @@ class AssessmentController extends Controller
                 'all_response' => json_encode($responses),
             ]);
 
-            \Log::info('Assessment created', [
+            // This one was already correct
+            Log::info('Assessment created', [
                 'assessment_id' => $assessment->id,
                 'overall_score' => $overallScore
             ]);
@@ -210,9 +221,13 @@ class AssessmentController extends Controller
 
             DB::commit();
 
-            \Log::info('=== ASSESSMENT COMPLETED SUCCESSFULLY ===');
+            // FIXED: Changed \Log::info to Log::info for consistency
+            Log::info('=== ASSESSMENT COMPLETED SUCCESSFULLY ===');
 
-            // Clear session data
+            // ✅ FIX 1: Store assessment ID in session for the completion blade
+            Session::flash('assessment_id', $assessment->id);
+
+            // Clear other session data
             Session::forget(['respondent_id', 'assessment_responses', 'current_trait_index']);
 
             // Redirect to completion page
@@ -221,15 +236,21 @@ class AssessmentController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('=== ASSESSMENT COMPLETION FAILED ===', [
+            // FIXED: Changed \Log::error to Log::error for consistency
+            Log::error('=== ASSESSMENT COMPLETION FAILED ===', [
                 'error' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString()
             ]);
-            return back()->with('error', 'An error occurred. Please try again.');
+            
+            // ✅ FIX 2: Change return back() to safe redirect on error
+            return redirect()->route('assessment.complete')
+                ->with('error', 'An error occurred during final submission. Please contact support if this persists.');
         }
     }
+
+// ... (rest of the controller code remains the same)
 
     /**
      * Show completion page
@@ -247,7 +268,8 @@ class AssessmentController extends Controller
         $traitScores = [];
         $traits = TraitModel::with(['subTraits.questions'])->get();
 
-        \Log::info('=== CALCULATING TRAIT SCORES ===', [
+        // FIXED: Changed \Log::info to Log::info for consistency
+        Log::info('=== CALCULATING TRAIT SCORES ===', [
             'total_traits' => $traits->count()
         ]);
 
@@ -266,7 +288,8 @@ class AssessmentController extends Controller
                 }
             }
 
-            \Log::info('Trait calculation details', [
+            // FIXED: Changed \Log::info to Log::info for consistency
+            Log::info('Trait calculation details', [
                 'trait_id' => $trait->id,
                 'trait_title' => $trait->title,
                 'question_ids' => $questionIds,
@@ -275,7 +298,8 @@ class AssessmentController extends Controller
             ]);
 
             if ($questionCount === 0) {
-                \Log::warning('No questions answered for trait', [
+                // FIXED: Changed \Log::warning to Log::warning for consistency
+                Log::warning('No questions answered for trait', [
                     'trait_id' => $trait->id,
                     'trait_title' => $trait->title
                 ]);
@@ -347,7 +371,8 @@ class AssessmentController extends Controller
     private function calculateOverallScore($traitScores)
     {
         if (empty($traitScores)) {
-            \Log::error('No trait scores to calculate overall score');
+            // FIXED: Changed \Log::error to Log::error for consistency
+            Log::error('No trait scores to calculate overall score');
             return 0;
         }
 
@@ -358,7 +383,8 @@ class AssessmentController extends Controller
         
         $average = $totalPercentage / count($traitScores);
         
-        \Log::info('Overall score calculation', [
+        // FIXED: Changed \Log::info to Log::info for consistency
+        Log::info('Overall score calculation', [
             'total_percentage' => $totalPercentage,
             'trait_count' => count($traitScores),
             'average' => $average
@@ -375,7 +401,8 @@ class AssessmentController extends Controller
         // Check what matrices exist for this trait
         $allMatrices = TraitScoreMatrix::where('trait_id', $traitId)->get();
         
-        \Log::info('Looking for trait interpretation', [
+        // FIXED: Changed \Log::info to Log::info for consistency
+        Log::info('Looking for trait interpretation', [
             'trait_id' => $traitId,
             'percentage' => $percentage,
             'matrices_count' => $allMatrices->count(),
@@ -395,7 +422,8 @@ class AssessmentController extends Controller
             ->first();
 
         if ($matrix && $matrix->interpretation) {
-            \Log::info('Found trait interpretation', [
+            // FIXED: Changed \Log::info to Log::info for consistency
+            Log::info('Found trait interpretation', [
                 'trait_id' => $traitId,
                 'percentage' => $percentage,
                 'interpretation' => $matrix->interpretation->interpretation
@@ -403,7 +431,8 @@ class AssessmentController extends Controller
             return $matrix->interpretation->interpretation;
         }
 
-        \Log::warning('No trait interpretation found', [
+        // FIXED: Changed \Log::warning to Log::warning for consistency
+        Log::warning('No trait interpretation found', [
             'trait_id' => $traitId, 
             'percentage' => $percentage
         ]);
@@ -426,7 +455,8 @@ class AssessmentController extends Controller
             return $matrix->interpretation->interpretation;
         }
 
-        \Log::warning('No subtrait interpretation found', [
+        // FIXED: Changed \Log::warning to Log::warning for consistency
+        Log::warning('No subtrait interpretation found', [
             'subtrait_id' => $subTraitId, 
             'percentage' => $percentage
         ]);
@@ -443,7 +473,8 @@ class AssessmentController extends Controller
         $firstTrait = TraitModel::orderBy('id')->first();
         
         if ($firstTrait) {
-            \Log::info('Getting overall interpretation using first trait', [
+            // FIXED: Changed \Log::info to Log::info for consistency
+            Log::info('Getting overall interpretation using first trait', [
                 'trait_id' => $firstTrait->id,
                 'percentage' => $percentage
             ]);
@@ -455,14 +486,16 @@ class AssessmentController extends Controller
                 ->first();
 
             if ($matrix && $matrix->interpretation) {
-                \Log::info('Found overall interpretation', [
+                // FIXED: Changed \Log::info to Log::info for consistency
+                Log::info('Found overall interpretation', [
                     'interpretation' => $matrix->interpretation->interpretation
                 ]);
                 return $matrix->interpretation->interpretation;
             }
         }
 
-        \Log::warning('No overall interpretation found', [
+        // FIXED: Changed \Log::warning to Log::warning for consistency
+        Log::warning('No overall interpretation found', [
             'percentage' => $percentage
         ]);
         

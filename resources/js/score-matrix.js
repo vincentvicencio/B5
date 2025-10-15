@@ -25,8 +25,52 @@ $(document).ready(function () {
         updateTraitSubTraitsDisplay($(this).val());
     });
 
+    // Enter key handlers for all modals
+    setupEnterKeyHandlers();
+
     loadAllData();
 });
+
+function setupEnterKeyHandlers() {
+    // Likert Scale Modal
+    $('#likertScaleModal').on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            saveLikertScale();
+        }
+    });
+
+    // Sub-Trait Matrix Modal
+    $('#subTraitMatrixModal').on('keypress', function(e) {
+        if (e.which === 13 && !$(e.target).is('select')) {
+            e.preventDefault();
+            saveSubTraitMatrix();
+        }
+    });
+
+    // Trait Matrix Modal
+    $('#traitMatrixModal').on('keypress', function(e) {
+        if (e.which === 13 && !$(e.target).is('select')) {
+            e.preventDefault();
+            saveTraitMatrix();
+        }
+    });
+
+    // Handle Enter key in select elements to trigger save
+    $('#subTraitSelect, #subTraitInterpretationSelect').on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            saveSubTraitMatrix();
+        }
+    });
+
+    $('#traitSelect, #traitInterpretationSelect').on('keypress', function(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            saveTraitMatrix();
+        }
+    });
+}
 
 function loadAllData() {
     loadLikertScales();
@@ -100,6 +144,9 @@ window.showAddLikertModal = function () {
     $('#likertValue').val('');
     $('#likertLabel').val('');
     likertModal.show();
+    
+    // Focus on first input
+    setTimeout(() => $('#likertValue').focus(), 300);
 };
 
 window.editLikertScale = function (id) {
@@ -111,6 +158,9 @@ window.editLikertScale = function (id) {
     $('#likertValue').val(scale.value);
     $('#likertLabel').val(scale.label);
     likertModal.show();
+    
+    // Focus on first input
+    setTimeout(() => $('#likertValue').focus(), 300);
 };
 
 window.saveLikertScale = function () {
@@ -237,9 +287,29 @@ function populateSubTraitDropdown(selectId, data) {
     const select = $(`#${selectId}`);
     select.empty();
     select.append(`<option value="">Select Sub-Trait</option>`);
+    
+    // Group sub-traits by parent trait
+    const grouped = {};
     data.forEach(item => {
-        const traitName = item.trait ? ` (${item.trait.title})` : '';
-        select.append(`<option value="${item.id}">${escapeHtml(item.subtrait_name)}${traitName}</option>`);
+        const traitTitle = item.trait ? item.trait.title : 'No Trait';
+        const traitId = item.trait ? item.trait.id : 0;
+        
+        if (!grouped[traitId]) {
+            grouped[traitId] = {
+                title: traitTitle,
+                subTraits: []
+            };
+        }
+        grouped[traitId].subTraits.push(item);
+    });
+    
+    // Add optgroups for each trait
+    Object.values(grouped).forEach(group => {
+        const optgroup = $(`<optgroup label="${escapeHtml(group.title)}"></optgroup>`);
+        group.subTraits.forEach(item => {
+            optgroup.append(`<option value="${item.id}">${escapeHtml(item.subtrait_name)}</option>`);
+        });
+        select.append(optgroup);
     });
 }
 
@@ -275,10 +345,8 @@ function updateTraitSubTraitsDisplay(traitId) {
         return;
     }
 
-    // Create button-style display without score ranges
     let html = '<div class="d-flex flex-wrap gap-2">';
     trait.sub_traits.forEach(subTrait => {
-        // Check if sub-trait is configured
         const matrices = subTraitMatrices.filter(m => m.subtrait_id === subTrait.id);
         const configuredClass = matrices.length > 0 ? '' : 'not-configured';
         
@@ -335,7 +403,7 @@ function renderSubTraitMatrices() {
                 <td class="text-center">${index + 1}</td>
                 <td><strong>${subTraitName}</strong></td>
                 <td>${parentTrait}</td>
-                <td><span class="badge bg-secondary">${matrix.min_score} - ${matrix.max_score}</span></td>
+                <td>${matrix.min_score} - ${matrix.max_score}</td>
                 <td>${interpretationLevel}</td>
                 <td class="text-muted small">${updatedDate}</td>
                 <td class="text-center">
@@ -361,6 +429,9 @@ window.showAddSubTraitMatrixModal = function () {
     $('#subTraitMaxScore').val('');
     $('#subTraitInterpretationSelect').val('');
     subTraitMatrixModal.show();
+    
+    // Focus on first select
+    setTimeout(() => $('#subTraitSelect').focus(), 300);
 };
 
 window.editSubTraitMatrix = function (id) {
@@ -375,6 +446,9 @@ window.editSubTraitMatrix = function (id) {
     $('#subTraitInterpretationSelect').val(matrix.interpretation_id);
     
     subTraitMatrixModal.show();
+    
+    // Focus on first select
+    setTimeout(() => $('#subTraitSelect').focus(), 300);
 };
 
 window.saveSubTraitMatrix = function () {
@@ -484,15 +558,16 @@ function renderTraitMatrices() {
         const traitName = group.trait ? escapeHtml(group.trait.title) : 'Unknown Trait';
         const subTraitsList = group.trait?.sub_traits || [];
         
-        html += `
-            <div class="trait-config-card">
-                <div class="mb-3">
-                    <div class="trait-title">${traitName}</div>
-                    <div class="text-muted small mt-2">
-                        ${subTraitsList.map(st => `<span class="sub-trait-pill">${escapeHtml(st.subtrait_name)}</span>`).join('')}
+         // Trait Card Header (Trait Name and Sub-Traits)
+            html += `
+                <div class="trait-config-card">
+                    <div class="mb-3 pb-3 border-bottom border-gray-200">
+                        <div class="trait-title">${traitName}</div>
+                        <div class="text-muted small mt-2 d-flex flex-wrap gap-2">
+                            ${subTraitsList.map(st => `<span class="sub-trait-pill">${escapeHtml(st.subtrait_name)}</span>`).join('')}
+                        </div>
                     </div>
-                </div>
-        `;
+            `;
 
         group.matrices.forEach(matrix => {
             const interpretationLevel = matrix.interpretation ? escapeHtml(matrix.interpretation.trait_level) : 'N/A';
@@ -518,7 +593,7 @@ function renderTraitMatrices() {
             `;
         });
 
-        html += `</div>`;
+            html += `</div>`;
     });
 
     container.html(html);
@@ -532,6 +607,9 @@ window.showAddTraitModal = function () {
     $('#traitMaxScore').val('');
     $('#traitInterpretationSelect').val('');
     traitMatrixModal.show();
+    
+    // Focus on first select
+    setTimeout(() => $('#traitSelect').focus(), 300);
 };
 
 window.editTraitMatrix = function (id) {
@@ -546,6 +624,9 @@ window.editTraitMatrix = function (id) {
     $('#traitInterpretationSelect').val(matrix.interpretation_id);
     
     traitMatrixModal.show();
+    
+    // Focus on first select
+    setTimeout(() => $('#traitSelect').focus(), 300);
 };
 
 window.saveTraitMatrix = function () {
